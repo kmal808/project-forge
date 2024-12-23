@@ -1,7 +1,7 @@
 import PocketBase from 'pocketbase'
 
 // Initialize PocketBase client
-export const pb = new PocketBase('process.env.POCKETBASE_URL')
+export const pb = new PocketBase('https://pforge.pockethost.io')
 
 // Helper to check if user is authenticated
 export const isAuthenticated = () => pb.authStore.isValid
