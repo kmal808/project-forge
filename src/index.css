@@ -3,63 +3,63 @@
 @tailwind utilities;
 
 :root {
-  --color-bg-primary: #ffffff;
-  --color-bg-secondary: #f3f4f6;
-  --color-text-primary: #1A1A1A;
-  --color-text-secondary: #4b5563;
-  --color-border-primary: #e5e7eb;
-  --color-border-secondary: #d1d5db;
-  --color-accent: #FF5722; /* Windows Hawaii Orange */
-  --color-accent-hover: #F4511E; /* Darker Orange */
-  --color-button-text: #ffffff;
+	--color-bg-primary: #ffffff;
+	--color-bg-secondary: #f3f4f6;
+	--color-text-primary: #1a1a1a;
+	--color-text-secondary: #4b5563;
+	--color-border-primary: #e5e7eb;
+	--color-border-secondary: #d1d5db;
+	--color-accent: #ff5722; /* Windows Hawaii Orange */
+	--color-accent-hover: #f4511e; /* Darker Orange */
+	--color-button-text: #ffffff;
 }
 
 .dark {
-  --color-bg-primary: #1A1A1A;
-  --color-bg-secondary: #2d3748;
-  --color-text-primary: #f9fafb;
-  --color-text-secondary: #9ca3af;
-  --color-border-primary: #4b5563;
-  --color-border-secondary: #374151;
-  --color-accent: #FF5722;
-  --color-accent-hover: #F4511E;
-  --color-button-text: #ffffff;
+	--color-bg-primary: #1a1a1a;
+	--color-bg-secondary: #2d3748;
+	--color-text-primary: #f9fafb;
+	--color-text-secondary: #9ca3af;
+	--color-border-primary: #4b5563;
+	--color-border-secondary: #374151;
+	--color-accent: #73daca;
+	--color-accent-hover: #08c5a9;
+	--color-button-text: #ffffff;
 }
 
 .tokyo-night {
-  --color-bg-primary: #1A1B26;
-  --color-bg-secondary: #24283B;
-  --color-text-primary: #A9B1D6;
-  --color-text-secondary: #787C99;
-  --color-border-primary: #24283B;
-  --color-border-secondary: #1F2335;
-  --color-accent: #FF5722; 
-  --color-accent-hover: #F4511E; 
-  --color-button-text: #ffffff;
+	--color-bg-primary: #1a1b26;
+	--color-bg-secondary: #24283b;
+	--color-text-primary: #a9b1d6;
+	--color-text-secondary: #787c99;
+	--color-border-primary: #24283b;
+	--color-border-secondary: #1f2335;
+	--color-accent: #9ece6a;
+	--color-accent-hover: #88e326;
+	--color-button-text: #ffffff;
 }
 
 .andromeda {
-  --color-bg-primary: #23262E;
-  --color-bg-secondary: #2F333D;
-  --color-text-primary: #E5E5E5;
-  --color-text-secondary: #A0A0A0;
-  --color-border-primary: #2F333D;
-  --color-border-secondary: #383C44;
-  --color-accent: #FF5722;
-  --color-accent-hover: #F4511E;
-  --color-button-text: #ffffff;
+	--color-bg-primary: #23262e;
+	--color-bg-secondary: #2f333d;
+	--color-text-primary: #e5e5e5;
+	--color-text-secondary: #a0a0a0;
+	--color-border-primary: #2f333d;
+	--color-border-secondary: #383c44;
+	--color-accent: #2298ff;
+	--color-accent-hover: hsl(207, 86%, 46%);
+	--color-button-text: #ffffff;
 }
 
 body {
-  @apply bg-primary text-primary transition-colors duration-200;
+	@apply bg-primary text-primary transition-colors duration-200;
 }
 
 @layer components {
-  .btn-primary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--color-accent)] px-4 py-2 text-[var(--color-button-text)] shadow-sm hover:bg-[var(--color-accent-hover)] transition-colors duration-200 font-medium;
-  }
-  
-  .btn-secondary {
-    @apply inline-flex items-center justify-center gap-2 rounded-lg border border-primary bg-primary px-4 py-2 text-primary shadow-sm hover:bg-secondary transition-colors duration-200 font-medium;
-  }
+	.btn-primary {
+		@apply inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--color-accent)] px-4 py-2 text-[var(--color-button-text)] shadow-sm hover:bg-[var(--color-accent-hover)] transition-colors duration-200 font-medium;
+	}
+
+	.btn-secondary {
+		@apply inline-flex items-center justify-center gap-2 rounded-lg border border-primary bg-primary px-4 py-2 text-primary shadow-sm hover:bg-secondary transition-colors duration-200 font-medium;
+	}
 }
