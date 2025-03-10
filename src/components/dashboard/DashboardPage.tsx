@@ -113,10 +113,10 @@ export function DashboardPage() {
 		<div className='min-h-screen py-8'>
 			<div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
 				<div className='mb-8'>
-					<h1 className='text-3xl font-bold text-gray-900'>
+					<h1 className='text-3xl font-bold text-primary'>
 						Welcome back, {user?.email}
 					</h1>
-					<p className='mt-2 text-sm text-gray-600'>
+					<p className='mt-2 text-sm text-primary'>
 						Here's what's happening in your workspace
 					</p>
 				</div>
@@ -132,10 +132,10 @@ export function DashboardPage() {
 								className='group relative overflow-hidden rounded-lg bg-secondary p-6 shadow-sm ring-1 ring-gray-900/5 transition-all hover:-translate-y-1 hover:shadow-lg'>
 								<div className='flex items-center justify-between'>
 									<div>
-										<p className='text-sm font-medium text-gray-500'>
+										<p className='text-sm font-medium text-primary'>
 											{metric.label}
 										</p>
-										<p className='mt-2 text-3xl font-semibold text-gray-900'>
+										<p className='mt-2 text-3xl font-semibold text-primary'>
 											{metric.value}
 										</p>
 									</div>

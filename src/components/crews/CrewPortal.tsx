@@ -69,8 +69,8 @@ export function CrewPortal() {
 		<div className='min-h-screen bg-secondary py-8'>
 			<div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
 				<div className='mb-8'>
-					<h1 className='text-3xl font-bold text-gray-900'>Crew Portal</h1>
-					<p className='mt-2 text-sm text-gray-600'>
+					<h1 className='text-3xl font-bold text-primary'>Crew Portal</h1>
+					<p className='mt-2 text-sm text-primary'>
 						Manage your job site tasks, materials, and documentation
 					</p>
 				</div>
@@ -146,10 +146,10 @@ export function CrewPortal() {
 						className='rounded-lg bg-primary p-6 shadow'>
 						<div className='space-y-6'>
 							<div>
-								<h3 className='text-lg font-medium text-gray-900'>
+								<h3 className='text-lg font-medium text-secondary'>
 									Upload Files
 								</h3>
-								<p className='mt-1 text-sm text-gray-500'>
+								<p className='mt-1 text-sm text-secondary'>
 									Upload photos, documents, and other files related to the job
 								</p>
 							</div>

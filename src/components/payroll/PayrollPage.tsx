@@ -151,8 +151,8 @@ export function PayrollPage() {
 
 	return (
 		<div className='space-y-6'>
-			<div className='flex items-center justify-between'>
-				<h2 className='text-2xl font-bold text-gray-900'>Payroll Management</h2>
+			<div className='flex bg-primary items-center justify-between'>
+				<h2 className='text-2xl font-bold text-primary'>Payroll Management</h2>
 				<button onClick={exportPayroll} className='btn-primary'>
 					<FileDown size={20} />
 					Export Payroll
@@ -166,7 +166,7 @@ export function PayrollPage() {
 					crews.map((crew) => (
 						<div
 							key={crew.crewId}
-							className='rounded-lg border border-gray-200 bg-primary p-6'>
+							className='rounded-lg border border-primary bg-secondary p-6'>
 							<div className='mb-6 flex items-center justify-between'>
 								<div className='flex items-center gap-2'>
 									{editingCrewId === crew.crewId ? (
@@ -174,17 +174,17 @@ export function PayrollPage() {
 											type='text'
 											value={editingCrewName}
 											onChange={(e) => setEditingCrewName(e.target.value)}
-											className='rounded-md border-gray-300 text-xl font-semibold'
+											className='rounded-md border-primary text-xl font-semibold'
 											autoFocus
 										/>
 									) : (
-										<h3 className='text-xl font-semibold text-gray-900'>
+										<h3 className='text-xl font-semibold text-primary'>
 											{crew.crewName}
 										</h3>
 									)}
 									<button
 										onClick={() => handleEditCrewName(crew)}
-										className='ml-2 rounded-full p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600'>
+										className='ml-2 rounded-full p-1 text-primary hover:accent hover:text-secondary hover:accent-hover'>
 										{editingCrewId === crew.crewId ? (
 											<Check className='h-5 w-5' />
 										) : (
@@ -250,7 +250,7 @@ export function PayrollPage() {
 			<ErrorBoundary>
 				<button
 					onClick={handleAddCrew}
-					className='mt-6 btn-secondary border-2 border-dashed'>
+					className='mt-6 btn-primary border-2 border-dashed'>
 					<PlusCircle size={20} />
 					Add New Crew
 				</button>

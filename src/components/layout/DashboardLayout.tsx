@@ -69,7 +69,7 @@ export function DashboardLayout() {
 			<div
 				className={`fixed inset-y-0 left-0 z-50 w-64 transform bg-primary border-r border-primary shadow-lg transition-transform duration-200 ease-in-out ${
 					sidebarOpen ? 'translate-x-0' : '-translate-x-full'
-				} lg:translate-x-0`}>
+				}`}>
 				<div className='flex h-16 items-center justify-between px-4'>
 					<h1 className='text-xl font-bold text-primary'>Project Forge</h1>
 					<span></span>
