@@ -166,7 +166,7 @@ export function PayrollPage() {
 					crews.map((crew) => (
 						<div
 							key={crew.crewId}
-							className='rounded-lg border border-gray-200 bg-white p-6'>
+							className='rounded-lg border border-gray-200 bg-primary p-6'>
 							<div className='mb-6 flex items-center justify-between'>
 								<div className='flex items-center gap-2'>
 									{editingCrewId === crew.crewId ? (
