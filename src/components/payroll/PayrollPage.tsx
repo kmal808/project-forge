@@ -151,7 +151,7 @@ export function PayrollPage() {
 
 	return (
 		<div className='space-y-6'>
-			<div className='flex bg-primary items-center justify-between'>
+			<div className='flex items-center justify-between'>
 				<h2 className='text-2xl font-bold text-primary'>Payroll Management</h2>
 				<button onClick={exportPayroll} className='btn-primary'>
 					<FileDown size={20} />
@@ -166,7 +166,7 @@ export function PayrollPage() {
 					crews.map((crew) => (
 						<div
 							key={crew.crewId}
-							className='rounded-lg border border-primary bg-secondary p-6'>
+							className='rounded-lg border border-primary bg-primary p-6'>
 							<div className='mb-6 flex items-center justify-between'>
 								<div className='flex items-center gap-2'>
 									{editingCrewId === crew.crewId ? (
