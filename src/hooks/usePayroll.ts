@@ -246,7 +246,7 @@ export function usePayroll() {
 			const { data: userData, error: userError } = await supabase.auth.getUser()
 			if (userError) throw userError
 
-			// Delete existing entries
+			// Delete existing entries for this employee
 			const { error: deleteError } = await supabase
 				.from('payroll_entries')
 				.delete()
@@ -254,7 +254,7 @@ export function usePayroll() {
 
 			if (deleteError) throw deleteError
 
-			// Insert new entries
+			// Only insert new entries if there are any
 			if (entries.length > 0) {
 				const { error: insertError } = await supabase
 					.from('payroll_entries')
@@ -278,7 +278,7 @@ export function usePayroll() {
 				if (insertError) throw insertError
 			}
 
-			// Update the local state to clear entries
+			// Update the local state immediately
 			setCrews(prev => prev.map(crew => {
 				if (crew.crewId === crewId) {
 					return {
@@ -287,7 +287,7 @@ export function usePayroll() {
 							if (emp.employeeId === employeeId) {
 								return {
 									...emp,
-									entries: [] // Clear entries after submission
+									entries: entries // Set to the new entries (empty array if deleted)
 								}
 							}
 							return emp
@@ -297,7 +297,8 @@ export function usePayroll() {
 				return crew
 			}))
 
-			await fetchPayrollData() // Refresh data
+			// Refresh data from the database to ensure consistency
+			await fetchPayrollData()
 			toast.success('Payroll entries updated successfully')
 		} catch (err) {
 			const message =

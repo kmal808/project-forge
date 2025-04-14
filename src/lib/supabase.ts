@@ -8,17 +8,32 @@ if (!supabaseUrl || !supabaseAnonKey) {
   throw new Error('Missing Supabase environment variables');
 }
 
+console.log('Supabase URL:', supabaseUrl);
+console.log('Supabase Anon Key present:', !!supabaseAnonKey);
+
 export const supabase = createClient<Database>(supabaseUrl, supabaseAnonKey, {
   auth: {
     autoRefreshToken: true,
     persistSession: true,
     detectSessionInUrl: true
+  },
+  global: {
+    headers: {
+      'apikey': supabaseAnonKey
+    }
   }
+});
+
+// Add session logging
+supabase.auth.onAuthStateChange((event, session) => {
+  console.log('Auth state changed:', event);
+  console.log('Session:', session);
 });
 
 export async function getCurrentUser() {
   try {
     const { data: { session }, error } = await supabase.auth.getSession();
+    console.log('Current session:', session);
     if (error) throw error;
     return session?.user || null;
   } catch (error) {
