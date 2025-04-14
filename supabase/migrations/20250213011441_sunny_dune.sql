@@ -27,7 +27,13 @@
       - employee_id (uuid, foreign key)
       - job_name (text)
       - job_number (text)
-      - amount (decimal)
+      - sunday_amount (decimal)
+      - monday_amount (decimal)
+      - tuesday_amount (decimal)
+      - wednesday_amount (decimal)
+      - thursday_amount (decimal)
+      - friday_amount (decimal)
+      - saturday_amount (decimal)
       - date (date)
       - user_id (uuid, foreign key)
     - materials
@@ -102,7 +108,13 @@ CREATE TABLE IF NOT EXISTS payroll_entries (
   employee_id uuid NOT NULL REFERENCES employees(id) ON DELETE CASCADE,
   job_name text NOT NULL,
   job_number text NOT NULL,
-  amount decimal NOT NULL,
+  sunday_amount decimal NOT NULL DEFAULT 0,
+  monday_amount decimal NOT NULL DEFAULT 0,
+  tuesday_amount decimal NOT NULL DEFAULT 0,
+  wednesday_amount decimal NOT NULL DEFAULT 0,
+  thursday_amount decimal NOT NULL DEFAULT 0,
+  friday_amount decimal NOT NULL DEFAULT 0,
+  saturday_amount decimal NOT NULL DEFAULT 0,
   date date NOT NULL,
   user_id uuid NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   created_at timestamptz NOT NULL DEFAULT now(),

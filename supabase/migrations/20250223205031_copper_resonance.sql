@@ -26,6 +26,7 @@ BEGIN
   DROP POLICY IF EXISTS "role_read_policy" ON roles;
   DROP POLICY IF EXISTS "role_insert_policy" ON roles;
   DROP POLICY IF EXISTS "role_admin_policy" ON roles;
+  DROP POLICY IF EXISTS "allow_read" ON roles;
 EXCEPTION
   WHEN undefined_object THEN NULL;
 END $$;
@@ -37,19 +38,13 @@ CREATE POLICY "allow_read"
   TO authenticated
   USING (true);
 
-CREATE POLICY "allow_insert_own_role"
+CREATE POLICY "allow_insert"
   ON roles
   FOR INSERT
   TO authenticated
-  WITH CHECK (
-    auth.uid() = user_id 
-    AND NOT EXISTS (
-      SELECT 1 FROM roles 
-      WHERE user_id = auth.uid()
-    )
-  );
+  WITH CHECK (auth.uid() = user_id);
 
-CREATE POLICY "allow_admin_all"
+CREATE POLICY "allow_admin"
   ON roles
   FOR ALL
   TO authenticated
@@ -57,7 +52,7 @@ CREATE POLICY "allow_admin_all"
     EXISTS (
       SELECT 1 FROM roles r
       WHERE r.user_id = auth.uid()
-      AND r.role = 'admin'
+      AND r.role = 'admin'::user_role
     )
   );
 

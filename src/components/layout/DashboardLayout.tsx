@@ -71,7 +71,7 @@ export function DashboardLayout() {
 					sidebarOpen ? 'translate-x-0' : '-translate-x-full'
 				}`}>
 				<div className='flex h-16 items-center justify-between px-4'>
-					<h1 className='text-xl font-bold text-primary'>Project Forge</h1>
+					<h1 className='text-xl font-bold text-primary'>Project Forge 🔨</h1>
 					<span></span>
 					<button
 						onClick={() => setSidebarOpen(false)}

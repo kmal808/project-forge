@@ -20,6 +20,14 @@ CREATE TABLE IF NOT EXISTS inventory (
 -- Enable RLS
 ALTER TABLE inventory ENABLE ROW LEVEL SECURITY;
 
+-- Drop existing policies safely
+DO $$ 
+BEGIN
+  DROP POLICY IF EXISTS "Users can manage their own inventory" ON inventory;
+EXCEPTION
+  WHEN undefined_object THEN NULL;
+END $$;
+
 -- Create policies for inventory
 CREATE POLICY "Users can manage their own inventory"
   ON inventory
@@ -29,10 +37,17 @@ CREATE POLICY "Users can manage their own inventory"
   WITH CHECK (auth.uid() = user_id);
 
 -- Create indexes
-CREATE INDEX idx_inventory_user_id ON inventory(user_id);
-CREATE INDEX idx_inventory_item_type ON inventory(item_type);
+CREATE INDEX IF NOT EXISTS idx_inventory_user_id ON inventory(user_id);
+CREATE INDEX IF NOT EXISTS idx_inventory_item_type ON inventory(item_type);
 
 -- Create updated_at trigger
+DO $$ 
+BEGIN
+  DROP TRIGGER IF EXISTS update_inventory_updated_at ON inventory;
+EXCEPTION
+  WHEN undefined_object THEN NULL;
+END $$;
+
 CREATE TRIGGER update_inventory_updated_at
   BEFORE UPDATE ON inventory
   FOR EACH ROW

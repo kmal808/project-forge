@@ -2,6 +2,7 @@
 ALTER TABLE roles DISABLE ROW LEVEL SECURITY;
 
 -- Drop all existing policies
+DROP POLICY IF EXISTS "allow_read" ON roles;
 DROP POLICY IF EXISTS "roles_select" ON roles;
 DROP POLICY IF EXISTS "roles_insert" ON roles;
 DROP POLICY IF EXISTS "roles_update" ON roles;
