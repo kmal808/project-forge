@@ -278,6 +278,25 @@ export function usePayroll() {
 				if (insertError) throw insertError
 			}
 
+			// Update the local state to clear entries
+			setCrews(prev => prev.map(crew => {
+				if (crew.crewId === crewId) {
+					return {
+						...crew,
+						employees: crew.employees.map(emp => {
+							if (emp.employeeId === employeeId) {
+								return {
+									...emp,
+									entries: [] // Clear entries after submission
+								}
+							}
+							return emp
+						})
+					}
+				}
+				return crew
+			}))
+
 			await fetchPayrollData() // Refresh data
 			toast.success('Payroll entries updated successfully')
 		} catch (err) {
