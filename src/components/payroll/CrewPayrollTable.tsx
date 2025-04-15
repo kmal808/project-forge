@@ -64,6 +64,12 @@ export function EmployeePayrollTable({
 		})
 	}
 
+	const handleRemoveEntry = (index: number) => {
+		const updatedEntries = [...entries]
+		updatedEntries.splice(index, 1)
+		onSubmitEntries(updatedEntries)
+	}
+
 	return (
 		<div className='mb-8'>
 			<div className='mb-4 flex items-center justify-between'>
@@ -151,7 +157,7 @@ export function EmployeePayrollTable({
 												jobName: e.target.value,
 											})
 										}
-										className='w-full rounded border-gray-300 text-sm'
+										className='w-full rounded border-gray-300 text-black text-sm'
 									/>
 								</td>
 								<td className='whitespace-nowrap px-3 py-2'>
@@ -164,11 +170,13 @@ export function EmployeePayrollTable({
 												jobNumber: e.target.value,
 											})
 										}
-										className='w-full rounded border-gray-300 text-sm'
+										className='w-full rounded border-gray-300 text-black text-sm'
 									/>
 								</td>
 								{days.map((day, dayIndex) => (
-									<td key={day} className='whitespace-nowrap px-3 py-2'>
+									<td
+										key={day}
+										className='whitespace-nowrap text-black px-3 py-2'>
 										<input
 											type='number'
 											value={entry.amounts[dayIndex] || ''}
@@ -183,7 +191,7 @@ export function EmployeePayrollTable({
 								))}
 								<td className='whitespace-nowrap px-3 py-2 text-center'>
 									<button
-										onClick={() => onRemoveEntry(index)}
+										onClick={() => handleRemoveEntry(index)}
 										className='text-red-600 hover:text-red-800'>
 										<Trash2 className='h-4 w-4' />
 									</button>
@@ -192,31 +200,33 @@ export function EmployeePayrollTable({
 						))}
 						{showEntryForm && (
 							<tr className='bg-secondary/5'>
-								<td className='whitespace-nowrap px-3 py-2'>
+								<td className='whitespace-nowrap text-black px-3 py-2'>
 									<input
 										type='text'
 										value={newEntry.jobName}
 										onChange={(e) =>
 											setNewEntry({ ...newEntry, jobName: e.target.value })
 										}
-										className='w-full rounded border-gray-300 text-sm'
+										className='w-full rounded border-gray-300 text-black text-sm'
 										placeholder='Job Name'
 										autoFocus
 									/>
 								</td>
-								<td className='whitespace-nowrap px-3 py-2'>
+								<td className='whitespace-nowrap text-black px-3 py-2'>
 									<input
 										type='text'
 										value={newEntry.jobNumber}
 										onChange={(e) =>
 											setNewEntry({ ...newEntry, jobNumber: e.target.value })
 										}
-										className='w-full rounded border-gray-300 text-sm'
+										className='w-full rounded border-gray-300 text-black text-sm'
 										placeholder='Job #'
 									/>
 								</td>
 								{days.map((day, dayIndex) => (
-									<td key={day} className='whitespace-nowrap px-3 py-2'>
+									<td
+										key={day}
+										className='whitespace-nowrap text-black px-3 py-2'>
 										<input
 											type='number'
 											value={newEntry.amounts[dayIndex] || ''}
@@ -225,7 +235,7 @@ export function EmployeePayrollTable({
 												amounts[dayIndex] = parseFloat(e.target.value) || 0
 												setNewEntry({ ...newEntry, amounts })
 											}}
-											className='w-full rounded border-gray-300 text-right text-sm'
+											className='w-full rounded border-gray-300 text-right text-black text-sm'
 											placeholder='0.00'
 										/>
 									</td>

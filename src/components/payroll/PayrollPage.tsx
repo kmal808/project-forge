@@ -5,6 +5,7 @@ import { EmployeePayrollTable } from './CrewPayrollTable'
 import { PlusCircle, FileDown, Edit2, Check } from 'lucide-react'
 import { ErrorBoundary } from '../ui/ErrorBoundary'
 import { LoadingSpinner } from '../ui/LoadingSpinner'
+import { toast } from 'sonner'
 
 export function PayrollPage() {
 	const {
@@ -127,13 +128,19 @@ export function PayrollPage() {
 		employeeId: string,
 		entries: PayrollEntry[]
 	) => {
-		await updateEmployeeEntries(crewId, employeeId, entries)
-		const key = `${crewId}-${employeeId}`
-		setDraftEntries((prev) => {
-			const newDrafts = { ...prev }
-			delete newDrafts[key]
-			return newDrafts
-		})
+		try {
+			await updateEmployeeEntries(crewId, employeeId, entries)
+			// Clear the draft entries for this employee
+			const key = `${crewId}-${employeeId}`
+			setDraftEntries((prev) => {
+				const newDrafts = { ...prev }
+				delete newDrafts[key]
+				return newDrafts
+			})
+		} catch (error) {
+			console.error('Error submitting entries:', error)
+			toast.error('Failed to submit entries')
+		}
 	}
 
 	const exportPayroll = () => {

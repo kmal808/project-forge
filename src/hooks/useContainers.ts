@@ -70,8 +70,13 @@ export function useContainers() {
 
   const addContainer = async (containerNumber: string) => {
     try {
+      console.log('Adding container:', containerNumber);
       const { data: userData, error: userError } = await supabase.auth.getUser();
-      if (userError) throw userError;
+      if (userError) {
+        console.error('Error getting user:', userError);
+        throw userError;
+      }
+      console.log('User data:', userData);
 
       const { data, error } = await supabase
         .from('container_lists')
@@ -84,7 +89,11 @@ export function useContainers() {
         .select()
         .single();
 
-      if (error) throw error;
+      if (error) {
+        console.error('Error creating container:', error);
+        throw error;
+      }
+      console.log('Created container:', data);
 
       setContainers(prev => [{
         id: data.id,
@@ -98,6 +107,7 @@ export function useContainers() {
       toast.success('Container added successfully');
       return data;
     } catch (err) {
+      console.error('Error in addContainer:', err);
       const message = err instanceof Error ? err.message : 'Failed to add container';
       toast.error(message);
       throw err;

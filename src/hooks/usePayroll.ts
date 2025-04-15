@@ -11,63 +11,80 @@ export function usePayroll() {
 	const fetchPayrollData = React.useCallback(async () => {
 		try {
 			setIsLoading(true)
+			console.log('Fetching payroll data...')
 
-			// Fetch crews with their employees and payroll entries
+			// First, fetch all crews
 			const { data: crewsData, error: crewsError } = await supabase
 				.from('crews')
-				.select(
-					`
-          id,
-          name,
-          employees (
-            id,
-            name,
-            payroll_entries (
-              id,
-              job_name,
-              job_number,
-              sunday_amount,
-              monday_amount,
-              tuesday_amount,
-              wednesday_amount,
-              thursday_amount,
-              friday_amount,
-              saturday_amount,
-              date
-            )
-          )
-        `
-				)
+				.select('id, name')
 				.order('created_at', { ascending: false })
 
-			if (crewsError) throw crewsError
+			if (crewsError) {
+				console.error('Error fetching crews:', crewsError)
+				throw crewsError
+			}
 
-			// Transform the data to match our frontend structure
-			const transformedCrews: CrewPayroll[] = (crewsData || []).map((crew) => ({
-				crewId: crew.id,
-				crewName: crew.name,
-				employees: crew.employees.map((emp) => ({
-					employeeId: emp.id,
-					name: emp.name,
-					entries: emp.payroll_entries.map((entry) => ({
-						jobName: entry.job_name,
-						jobNumber: entry.job_number,
-						amounts: [
-							entry.sunday_amount,
-							entry.monday_amount,
-							entry.tuesday_amount,
-							entry.wednesday_amount,
-							entry.thursday_amount,
-							entry.friday_amount,
-							entry.saturday_amount,
-						],
-						date: entry.date,
-					})),
-				})),
-			}))
+			console.log('Raw crews data:', crewsData)
 
-			setCrews(transformedCrews)
+			// Then, for each crew, fetch its employees
+			const crewsWithEmployees = await Promise.all(
+				(crewsData || []).map(async (crew) => {
+					const { data: employeesData, error: employeesError } = await supabase
+						.from('employees')
+						.select('id, name')
+						.eq('crew_id', crew.id)
+
+					if (employeesError) {
+						console.error(`Error fetching employees for crew ${crew.id}:`, employeesError)
+						throw employeesError
+					}
+
+					// For each employee, fetch their payroll entries
+					const employeesWithEntries = await Promise.all(
+						(employeesData || []).map(async (employee) => {
+							const { data: entriesData, error: entriesError } = await supabase
+								.from('payroll_entries')
+								.select('*')
+								.eq('employee_id', employee.id)
+
+							if (entriesError) {
+								console.error(`Error fetching entries for employee ${employee.id}:`, entriesError)
+								throw entriesError
+							}
+
+							return {
+								employeeId: employee.id,
+								name: employee.name,
+								entries: (entriesData || []).map((entry) => ({
+									jobName: entry.job_name,
+									jobNumber: entry.job_number,
+									amounts: [
+										entry.sunday_amount || 0,
+										entry.monday_amount || 0,
+										entry.tuesday_amount || 0,
+										entry.wednesday_amount || 0,
+										entry.thursday_amount || 0,
+										entry.friday_amount || 0,
+										entry.saturday_amount || 0,
+									],
+									date: entry.date,
+								})),
+							}
+						})
+					)
+
+					return {
+						crewId: crew.id,
+						crewName: crew.name,
+						employees: employeesWithEntries,
+					}
+				})
+			)
+
+			console.log('Transformed crews:', crewsWithEmployees)
+			setCrews(crewsWithEmployees)
 		} catch (err) {
+			console.error('Error in fetchPayrollData:', err)
 			setError(
 				err instanceof Error ? err : new Error('Failed to fetch payroll data')
 			)
@@ -256,29 +273,30 @@ export function usePayroll() {
 
 			// Only insert new entries if there are any
 			if (entries.length > 0) {
-				const { error: insertError } = await supabase
-					.from('payroll_entries')
-					.insert(
-						entries.map((entry) => ({
+				// Now insert the entries with the correct structure
+				for (const entry of entries) {
+					// Calculate total amount for the week
+					const totalAmount = entry.amounts.reduce((sum, amount) => sum + (Number(amount) || 0), 0)
+					
+					const { error: insertError } = await supabase
+						.from('payroll_entries')
+						.insert({
 							employee_id: employeeId,
 							job_name: entry.jobName,
 							job_number: entry.jobNumber,
-							sunday_amount: entry.amounts[0],
-							monday_amount: entry.amounts[1],
-							tuesday_amount: entry.amounts[2],
-							wednesday_amount: entry.amounts[3],
-							thursday_amount: entry.amounts[4],
-							friday_amount: entry.amounts[5],
-							saturday_amount: entry.amounts[6],
+							amount: totalAmount,
 							date: entry.date,
 							user_id: userData.user.id,
-						}))
-					)
+						})
 
-				if (insertError) throw insertError
+					if (insertError) {
+						console.error('Error inserting entry:', insertError)
+						throw insertError
+					}
+				}
 			}
 
-			// Update the local state immediately
+			// Update the local state immediately without refreshing
 			setCrews(prev => prev.map(crew => {
 				if (crew.crewId === crewId) {
 					return {
@@ -297,10 +315,9 @@ export function usePayroll() {
 				return crew
 			}))
 
-			// Refresh data from the database to ensure consistency
-			await fetchPayrollData()
 			toast.success('Payroll entries updated successfully')
 		} catch (err) {
+			console.error('Error updating entries:', err)
 			const message =
 				err instanceof Error ? err.message : 'Failed to update payroll entries'
 			toast.error(message)
