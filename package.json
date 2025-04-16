@@ -17,7 +17,7 @@
     "pocketbase": "^0.21.1",
     "dexie": "^3.2.6", 
     "dexie-react-hooks": "^1.1.7",
-    "sonner": "^1.4.3"
+    "sonner": "^1.7.4"
   },
   "devDependencies": {
     "@eslint/js": "^9.9.1",
