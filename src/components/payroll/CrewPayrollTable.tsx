@@ -80,7 +80,7 @@ export function EmployeePayrollTable({
 								type='text'
 								value={tempName}
 								onChange={(e) => setTempName(e.target.value)}
-								className='rounded-md border-gray-300 text-lg font-medium min-w-[200px]'
+								className='rounded-md border-gray-300 text-slate-900 text-lg font-medium min-w-[200px]'
 								autoFocus
 								onKeyDown={(e) => {
 									if (e.key === 'Enter') {
@@ -90,19 +90,19 @@ export function EmployeePayrollTable({
 							/>
 							<button
 								onClick={handleNameSave}
-								className='rounded-full p-1 text-primary hover:bg-gray-100 hover:text-secondary'
+								className='rounded-full p-1 text-primary hover:bg-gray-100 hover:text-slate-900'
 								disabled={!tempName.trim()}>
 								<Check className='h-5 w-5' />
 							</button>
 						</div>
 					) : (
 						<div className='flex items-center gap-2'>
-							<h3 className='text-lg font-medium text-primary'>
+							<h3 className='text-lg font-medium text-slate-900'>
 								{employeeName}
 							</h3>
 							<button
 								onClick={() => setIsEditingName(true)}
-								className='rounded-full p-1 text-primary hover:bg-gray-100 hover:text-secondary'>
+								className='rounded-full p-1 text-primary hover:bg-gray-100 hover:text-slate-900'>
 								<Edit2 className='h-5 w-5' />
 							</button>
 							<button
@@ -146,7 +146,7 @@ export function EmployeePayrollTable({
 					</thead>
 					<tbody className='divide-y divide-gray-200'>
 						{entries.map((entry, index) => (
-							<tr key={index} className='hover:bg-gray-50'>
+							<tr key={index} className='hover:bg-brand-orange'>
 								<td className='whitespace-nowrap px-3 py-2'>
 									<input
 										type='text'
@@ -157,7 +157,7 @@ export function EmployeePayrollTable({
 												jobName: e.target.value,
 											})
 										}
-										className='w-full rounded border-gray-300 text-black text-sm'
+										className='w-full rounded border-gray-300 text-slate-900 text-sm'
 									/>
 								</td>
 								<td className='whitespace-nowrap px-3 py-2'>
@@ -170,13 +170,13 @@ export function EmployeePayrollTable({
 												jobNumber: e.target.value,
 											})
 										}
-										className='w-full rounded border-gray-300 text-black text-sm'
+										className='w-full rounded border-gray-300 text-slate-900 text-sm'
 									/>
 								</td>
 								{days.map((day, dayIndex) => (
 									<td
 										key={day}
-										className='whitespace-nowrap text-black px-3 py-2'>
+										className='whitespace-nowrap text-slate-900 px-3 py-2'>
 										<input
 											type='number'
 											value={entry.amounts[dayIndex] || ''}
@@ -185,7 +185,7 @@ export function EmployeePayrollTable({
 												newAmounts[dayIndex] = parseFloat(e.target.value) || 0
 												onEntryChange(index, { ...entry, amounts: newAmounts })
 											}}
-											className='w-full rounded border-gray-300 text-right text-sm'
+											className='w-full rounded border-gray-300 text-right text-slate-900 text-sm'
 										/>
 									</td>
 								))}
@@ -200,33 +200,33 @@ export function EmployeePayrollTable({
 						))}
 						{showEntryForm && (
 							<tr className='bg-secondary/5'>
-								<td className='whitespace-nowrap text-black px-3 py-2'>
+								<td className='whitespace-nowrap text-slate-900 px-3 py-2'>
 									<input
 										type='text'
 										value={newEntry.jobName}
 										onChange={(e) =>
 											setNewEntry({ ...newEntry, jobName: e.target.value })
 										}
-										className='w-full rounded border-gray-300 text-black text-sm'
+										className='w-full rounded border-gray-300 text-slate-900 text-sm'
 										placeholder='Job Name'
 										autoFocus
 									/>
 								</td>
-								<td className='whitespace-nowrap text-black px-3 py-2'>
+								<td className='whitespace-nowrap text-slate-900 px-3 py-2'>
 									<input
 										type='text'
 										value={newEntry.jobNumber}
 										onChange={(e) =>
 											setNewEntry({ ...newEntry, jobNumber: e.target.value })
 										}
-										className='w-full rounded border-gray-300 text-black text-sm'
+										className='w-full rounded border-gray-300 text-slate-900 text-sm'
 										placeholder='Job #'
 									/>
 								</td>
 								{days.map((day, dayIndex) => (
 									<td
 										key={day}
-										className='whitespace-nowrap text-black px-3 py-2'>
+										className='whitespace-nowrap text-slate-900 px-3 py-2'>
 										<input
 											type='number'
 											value={newEntry.amounts[dayIndex] || ''}
@@ -235,7 +235,7 @@ export function EmployeePayrollTable({
 												amounts[dayIndex] = parseFloat(e.target.value) || 0
 												setNewEntry({ ...newEntry, amounts })
 											}}
-											className='w-full rounded border-gray-300 text-right text-black text-sm'
+											className='w-full rounded border-gray-300 text-right text-slate-900 text-sm'
 											placeholder='0.00'
 										/>
 									</td>

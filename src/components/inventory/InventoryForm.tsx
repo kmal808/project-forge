@@ -48,7 +48,7 @@ export function InventoryForm({ onSubmit }: InventoryFormProps) {
 				<div>
 					<label
 						htmlFor='jobName'
-						className='block text-sm font-medium text-gray-700'>
+						className='block text-sm font-medium text-secondary'>
 						Job Name
 					</label>
 					<input
@@ -58,7 +58,7 @@ export function InventoryForm({ onSubmit }: InventoryFormProps) {
 						onChange={(e) =>
 							setFormData({ ...formData, jobName: e.target.value })
 						}
-						className='mt-1 block w-full rounded-md border-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+						className='mt-1 block w-full rounded-md border-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-gray-700'
 						required
 					/>
 				</div>
@@ -66,7 +66,7 @@ export function InventoryForm({ onSubmit }: InventoryFormProps) {
 				<div>
 					<label
 						htmlFor='jobNumber'
-						className='block text-sm font-medium text-gray-700'>
+						className='block text-sm font-medium text-secondary'>
 						Job Number
 					</label>
 					<input
@@ -76,7 +76,7 @@ export function InventoryForm({ onSubmit }: InventoryFormProps) {
 						onChange={(e) =>
 							setFormData({ ...formData, jobNumber: e.target.value })
 						}
-						className='mt-1 block w-full rounded-md border-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+						className='mt-1 block w-full rounded-md border-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-gray-700'
 						required
 					/>
 				</div>
@@ -84,7 +84,7 @@ export function InventoryForm({ onSubmit }: InventoryFormProps) {
 				<div>
 					<label
 						htmlFor='manufacturerOrderNumber'
-						className='block text-sm font-medium text-gray-700'>
+						className='block text-sm font-medium text-secondary'>
 						Manufacturer Order #
 					</label>
 					<input
@@ -97,7 +97,7 @@ export function InventoryForm({ onSubmit }: InventoryFormProps) {
 								manufacturerOrderNumber: e.target.value,
 							})
 						}
-						className='mt-1 block w-full rounded-md border-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+						className='mt-1 block w-full rounded-md border-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-gray-700'
 						required
 					/>
 				</div>
@@ -105,7 +105,7 @@ export function InventoryForm({ onSubmit }: InventoryFormProps) {
 				<div>
 					<label
 						htmlFor='itemType'
-						className='block text-sm font-medium text-gray-700'>
+						className='block text-sm font-medium text-secondary'>
 						Item Type
 					</label>
 					<select
@@ -117,7 +117,7 @@ export function InventoryForm({ onSubmit }: InventoryFormProps) {
 								itemType: e.target.value as ProductType,
 							})
 						}
-						className='mt-1 block w-full rounded-md border-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'>
+						className='mt-1 block w-full rounded-md border-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-gray-700'>
 						{PRODUCT_TYPES.map((type) => (
 							<option key={type.value} value={type.value}>
 								{type.label}
@@ -129,7 +129,7 @@ export function InventoryForm({ onSubmit }: InventoryFormProps) {
 				<div>
 					<label
 						htmlFor='quantity'
-						className='block text-sm font-medium text-gray-700'>
+						className='block text-sm font-medium text-secondary'>
 						Quantity
 					</label>
 					<input
@@ -143,7 +143,7 @@ export function InventoryForm({ onSubmit }: InventoryFormProps) {
 								quantity: parseInt(e.target.value) || 1,
 							})
 						}
-						className='mt-1 block w-full rounded-md border-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+						className='mt-1 block w-full rounded-md border-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-gray-700'
 						required
 					/>
 				</div>
@@ -152,7 +152,7 @@ export function InventoryForm({ onSubmit }: InventoryFormProps) {
 			<div>
 				<label
 					htmlFor='notes'
-					className='block text-sm font-medium text-gray-700'>
+					className='block text-sm font-medium text-secondary'>
 					Notes
 				</label>
 				<textarea
@@ -160,7 +160,7 @@ export function InventoryForm({ onSubmit }: InventoryFormProps) {
 					rows={3}
 					value={formData.notes}
 					onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
-					className='mt-1 block w-full rounded-md border-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+					className='mt-1 block w-full rounded-md border-gray-500 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm text-gray-700'
 				/>
 			</div>
 

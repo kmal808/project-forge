@@ -181,17 +181,17 @@ export function PayrollPage() {
 											type='text'
 											value={editingCrewName}
 											onChange={(e) => setEditingCrewName(e.target.value)}
-											className='rounded-md border-primary text-xl font-semibold'
+											className='rounded-md border-primary text-slate-900 text-xl font-semibold'
 											autoFocus
 										/>
 									) : (
-										<h3 className='text-xl font-semibold text-primary'>
+										<h3 className='text-xl font-semibold text-slate-900'>
 											{crew.crewName}
 										</h3>
 									)}
 									<button
 										onClick={() => handleEditCrewName(crew)}
-										className='ml-2 rounded-full p-1 text-primary hover:accent hover:text-secondary hover:accent-hover'>
+										className='ml-2 rounded-full p-1 text-primary hover:accent hover:text-slate-900 hover:accent-hover'>
 										{editingCrewId === crew.crewId ? (
 											<Check className='h-5 w-5' />
 										) : (
