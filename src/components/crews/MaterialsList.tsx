@@ -61,7 +61,7 @@ export function MaterialsList({
 							id='name'
 							value={newItem.name}
 							onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
-							className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+							className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
 							required
 						/>
 					</div>
@@ -83,7 +83,7 @@ export function MaterialsList({
 									quantity: parseInt(e.target.value) || 1,
 								})
 							}
-							className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+							className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
 							required
 						/>
 					</div>
@@ -98,7 +98,7 @@ export function MaterialsList({
 							id='unit'
 							value={newItem.unit}
 							onChange={(e) => setNewItem({ ...newItem, unit: e.target.value })}
-							className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'>
+							className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'>
 							<option value='pieces'>Pieces</option>
 							<option value='feet'>Feet</option>
 							<option value='yards'>Yards</option>
@@ -119,7 +119,7 @@ export function MaterialsList({
 						rows={2}
 						value={newItem.notes}
 						onChange={(e) => setNewItem({ ...newItem, notes: e.target.value })}
-						className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+						className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
 					/>
 				</div>
 
@@ -131,7 +131,7 @@ export function MaterialsList({
 				</div>
 			</form>
 
-			<div className='overflow-hidden shadow ring-1 ring-black ring-opacity-5 sm:rounded-lg'>
+			<div className='overflow-hidden shadow-sm ring-1 ring-black ring-opacity-5 sm:rounded-lg'>
 				<table className='min-w-full divide-y divide-gray-300'>
 					<thead className='bg-gray-50'>
 						<tr>

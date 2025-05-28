@@ -27,11 +27,11 @@ export function ConfiguratorStepper({ currentStep }: ConfiguratorStepperProps) {
         {steps.map((step, index) => (
           <li
             key={step.id}
-            className={`relative flex-shrink-0 ${index !== steps.length - 1 ? 'pr-8 sm:pr-20' : ''}`}
+            className={`relative shrink-0 ${index !== steps.length - 1 ? 'pr-8 sm:pr-20' : ''}`}
           >
             {index !== steps.length - 1 && (
               <div
-                className="absolute right-0 top-1/2 -mt-px h-0.5 w-full bg-[var(--color-border-primary)]"
+                className="absolute right-0 top-1/2 -mt-px h-0.5 w-full bg-(--color-border-primary)"
                 aria-hidden="true"
               />
             )}
@@ -41,10 +41,10 @@ export function ConfiguratorStepper({ currentStep }: ConfiguratorStepperProps) {
                 <span
                   className={`relative z-10 flex h-8 w-8 items-center justify-center rounded-full ${
                     index < currentStepIndex
-                      ? 'bg-[var(--color-accent)]'
+                      ? 'bg-(--color-accent)'
                       : index === currentStepIndex
-                      ? 'border-2 border-[var(--color-accent)] bg-primary'
-                      : 'border-2 border-[var(--color-border-primary)] bg-primary'
+                      ? 'border-2 border-(--color-accent) bg-primary'
+                      : 'border-2 border-(--color-border-primary) bg-primary'
                   }`}
                 >
                   {index < currentStepIndex ? (
@@ -53,7 +53,7 @@ export function ConfiguratorStepper({ currentStep }: ConfiguratorStepperProps) {
                     <span
                       className={
                         index === currentStepIndex
-                          ? 'h-2.5 w-2.5 rounded-full bg-[var(--color-accent)]'
+                          ? 'h-2.5 w-2.5 rounded-full bg-(--color-accent)'
                           : 'h-2.5 w-2.5 rounded-full bg-transparent'
                       }
                     />
@@ -63,7 +63,7 @@ export function ConfiguratorStepper({ currentStep }: ConfiguratorStepperProps) {
               <span className="ml-4 mt-0.5 flex min-w-0 flex-col">
                 <span
                   className={`text-sm font-medium ${
-                    index <= currentStepIndex ? 'text-[var(--color-accent)]' : 'text-secondary'
+                    index <= currentStepIndex ? 'text-(--color-accent)' : 'text-secondary'
                   }`}
                 >
                   {step.name}

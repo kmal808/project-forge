@@ -102,7 +102,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 						onChange={(e) =>
 							setFormData({ ...formData, jobId: e.target.value })
 						}
-						className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+						className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
 						required
 					/>
 				</div>
@@ -120,7 +120,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 						onChange={(e) =>
 							setFormData({ ...formData, clientName: e.target.value })
 						}
-						className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+						className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
 						required
 					/>
 				</div>
@@ -134,7 +134,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 					<button
 						type='button'
 						onClick={() => addIssue('installation')}
-						// className='inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500'>
+						// className='inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500'>
 						className='btn-primary'>
 						<Plus className='h-4 w-4' />
 						Add Issue
@@ -144,7 +144,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 				{formData.installationIssues.map((issue, index) => (
 					<div key={index} className='rounded-lg border border-gray-200 p-4'>
 						<div className='flex items-start justify-between'>
-							<div className='flex-grow space-y-4'>
+							<div className='grow space-y-4'>
 								<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
 									<div>
 										<label className='block text-sm font-medium text-primary'>
@@ -161,7 +161,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 													e.target.value
 												)
 											}
-											className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+											className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
 										/>
 									</div>
 									<div>
@@ -178,7 +178,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 													e.target.value
 												)
 											}
-											className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'>
+											className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'>
 											<option value='minor'>Minor</option>
 											<option value='moderate'>Moderate</option>
 											<option value='major'>Major</option>
@@ -200,7 +200,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 											)
 										}
 										rows={2}
-										className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+										className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
 									/>
 								</div>
 							</div>
@@ -223,7 +223,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 					<button
 						type='button'
 						onClick={() => addIssue('manufacturing')}
-						className='inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500'>
+						className='inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500'>
 						<Plus className='h-4 w-4' />
 						Add Issue
 					</button>
@@ -232,7 +232,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 				{formData.manufacturingIssues.map((issue, index) => (
 					<div key={index} className='rounded-lg border border-gray-200 p-4'>
 						<div className='flex items-start justify-between'>
-							<div className='flex-grow space-y-4'>
+							<div className='grow space-y-4'>
 								<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
 									<div>
 										<label className='block text-sm font-medium text-gray-700'>
@@ -249,7 +249,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 													e.target.value
 												)
 											}
-											className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+											className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
 										/>
 									</div>
 									<div>
@@ -266,7 +266,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 													e.target.value
 												)
 											}
-											className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'>
+											className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'>
 											<option value='minor'>Minor</option>
 											<option value='moderate'>Moderate</option>
 											<option value='major'>Major</option>
@@ -288,7 +288,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 											)
 										}
 										rows={2}
-										className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+										className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
 									/>
 								</div>
 							</div>
@@ -324,7 +324,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 										.value as WalkthroughFormType['paymentStatus'],
 								})
 							}
-							className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'>
+							className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'>
 							<option value='pending'>Pending</option>
 							<option value='partial'>Partial</option>
 							<option value='complete'>Complete</option>
@@ -337,7 +337,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 							className='block text-sm font-medium text-gray-700'>
 							Payment Amount
 						</label>
-						<div className='relative mt-1 rounded-md shadow-sm'>
+						<div className='relative mt-1 rounded-md shadow-xs'>
 							<div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
 								<DollarSign className='h-5 w-5 text-gray-400' />
 							</div>
@@ -369,7 +369,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 						onChange={(e) =>
 							setFormData({ ...formData, followUpNeeded: e.target.checked })
 						}
-						className='h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-500'
+						className='h-4 w-4 rounded-sm border-gray-300 text-indigo-600 focus:ring-indigo-500'
 					/>
 					<label
 						htmlFor='followUpNeeded'
@@ -392,7 +392,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 								setFormData({ ...formData, followUpNotes: e.target.value })
 							}
 							rows={3}
-							className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+							className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
 						/>
 					</div>
 				)}
@@ -410,7 +410,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 			<div className='flex justify-end'>
 				<button
 					type='submit'
-					className='inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500'>
+					className='inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500'>
 					Submit Walkthrough
 				</button>
 			</div>

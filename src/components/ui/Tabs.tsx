@@ -57,7 +57,7 @@ export function TabsTrigger({ value, className = '', children }: TabsTriggerProp
       onClick={() => context.onChange(value)}
       className={`group relative flex h-12 items-center justify-center transition-colors
         ${isActive 
-          ? 'bg-[var(--color-accent)] text-[var(--color-button-text)]' 
+          ? 'bg-(--color-accent) text-(--color-button-text)' 
           : 'text-secondary hover:bg-secondary'
         }
         first:rounded-l-lg last:rounded-r-lg

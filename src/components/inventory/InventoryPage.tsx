@@ -89,7 +89,7 @@ export function InventoryPage() {
 					Container {selectedContainer?.containerNumber}
 				</h2>
 				<div className='flex items-center gap-4'>
-					<label className='cursor-pointer rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-secondary shadow-sm ring-1 ring-inset ring-gray-300 hover:accent hover:text-secondary hover:accent-hover'>
+					<label className='cursor-pointer rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-secondary shadow-xs ring-1 ring-inset ring-gray-300 hover:accent hover:text-secondary hover:accent-hover'>
 						<div className='flex items-center gap-2'>
 							<FileUp className='h-5 w-5' />
 							Import

@@ -76,7 +76,7 @@ export function ReviewStep({ item, onAddToCart, onEdit }: ReviewStepProps) {
 				</p>
 			</div>
 
-			<div className='rounded-lg border border-gray-200 bg-primary shadow'>
+			<div className='rounded-lg border border-gray-200 bg-primary shadow-sm'>
 				<div className='p-6'>
 					<div className='flex items-center justify-between'>
 						<h3 className='text-lg font-medium text-primary'>
@@ -137,7 +137,7 @@ export function ReviewStep({ item, onAddToCart, onEdit }: ReviewStepProps) {
 								onChange={(e) =>
 									setQuantity(Math.max(1, parseInt(e.target.value) || 1))
 								}
-								className='w-20 rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+								className='w-20 rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
 							/>
 						</div>
 						<div className='text-right'>
@@ -152,7 +152,7 @@ export function ReviewStep({ item, onAddToCart, onEdit }: ReviewStepProps) {
 				<div className='border-t border-gray-200 px-6 py-4'>
 					<button
 						onClick={handleAddToCart}
-						className='button-primary flex w-full items-center justify-center gap-2 rounded-md bg-indigo-600 px-6 py-3 text-base font-semibold text-primary shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>
+						className='button-primary flex w-full items-center justify-center gap-2 rounded-md bg-indigo-600 px-6 py-3 text-base font-semibold text-primary shadow-xs hover:bg-indigo-500 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>
 						<ShoppingCart className='h-5 w-5' />
 						Add to Cart
 					</button>

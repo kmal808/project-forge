@@ -72,7 +72,7 @@ export function PunchList({
 							onChange={(e) =>
 								setNewItem({ ...newItem, description: e.target.value })
 							}
-							className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+							className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
 							required
 						/>
 					</div>
@@ -92,7 +92,7 @@ export function PunchList({
 									priority: e.target.value as PunchListItem['priority'],
 								})
 							}
-							className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'>
+							className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'>
 							<option value='low'>Low</option>
 							<option value='medium'>Medium</option>
 							<option value='high'>High</option>
@@ -111,7 +111,7 @@ export function PunchList({
 						rows={2}
 						value={newItem.notes}
 						onChange={(e) => setNewItem({ ...newItem, notes: e.target.value })}
-						className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+						className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
 					/>
 				</div>
 

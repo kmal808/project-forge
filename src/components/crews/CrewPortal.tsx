@@ -113,7 +113,7 @@ export function CrewPortal() {
 
 					<TabsContent
 						value='materials'
-						className='rounded-lg bg-primary p-6 shadow'>
+						className='rounded-lg bg-primary p-6 shadow-sm'>
 						<ErrorBoundary>
 							{materialsLoading ? (
 								<LoadingSpinner />
@@ -130,7 +130,7 @@ export function CrewPortal() {
 
 					<TabsContent
 						value='punch-list'
-						className='rounded-lg bg-primary p-6 shadow'>
+						className='rounded-lg bg-primary p-6 shadow-sm'>
 						<ErrorBoundary>
 							<PunchList
 								items={punchListItems}
@@ -143,7 +143,7 @@ export function CrewPortal() {
 
 					<TabsContent
 						value='files'
-						className='rounded-lg bg-primary p-6 shadow'>
+						className='rounded-lg bg-primary p-6 shadow-sm'>
 						<div className='space-y-6'>
 							<div>
 								<h3 className='text-lg font-medium text-secondary'>
@@ -159,7 +159,7 @@ export function CrewPortal() {
 
 					<TabsContent
 						value='walkthrough'
-						className='rounded-lg bg-primary p-6 shadow'>
+						className='rounded-lg bg-primary p-6 shadow-sm'>
 						<WalkthroughForm
 							onSubmit={(form) => {
 								console.log('Walkthrough form submitted:', form)

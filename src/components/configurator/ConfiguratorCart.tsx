@@ -115,13 +115,13 @@ export function ConfiguratorCart({
 								<div className='mt-6 space-y-4'>
 									<button
 										onClick={handleExport}
-										className='flex w-full items-center justify-center gap-2 rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-primary shadow-sm hover:bg-accent-hover'>
+										className='flex w-full items-center justify-center gap-2 rounded-md border border-transparent bg-indigo-600 px-6 py-3 text-base font-medium text-primary shadow-xs hover:bg-accent-hover'>
 										<FileDown className='h-5 w-5' />
 										Export Quote
 									</button>
 									<button
 										type='button'
-										className='flex w-full items-center justify-center gap-2 rounded-md border border-transparent bg-green-600 px-6 py-3 text-base font-medium text-primary shadow-sm hover:bg-green-700'>
+										className='flex w-full items-center justify-center gap-2 rounded-md border border-transparent bg-green-600 px-6 py-3 text-base font-medium text-primary shadow-xs hover:bg-green-700'>
 										<Send className='h-5 w-5' />
 										Send to Customer
 									</button>

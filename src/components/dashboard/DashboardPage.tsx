@@ -129,7 +129,7 @@ export function DashboardPage() {
 							<Link
 								key={index}
 								to={metric.link}
-								className='group relative overflow-hidden rounded-lg bg-secondary p-6 shadow-sm ring-1 ring-gray-900/5 transition-all hover:-translate-y-1 hover:shadow-lg'>
+								className='group relative overflow-hidden rounded-lg bg-secondary p-6 shadow-xs ring-1 ring-gray-900/5 transition-all hover:-translate-y-1 hover:shadow-lg'>
 								<div className='flex items-center justify-between'>
 									<div>
 										<p className='text-sm font-medium text-primary'>
@@ -151,7 +151,7 @@ export function DashboardPage() {
 
 				<div className='grid gap-6 lg:grid-cols-2'>
 					{/* Quick Notes */}
-					<div className='rounded-lg bg-secondary p-6 shadow-sm ring-1 ring-gray-900/5'>
+					<div className='rounded-lg bg-secondary p-6 shadow-xs ring-1 ring-gray-900/5'>
 						<div className='mb-4 flex items-center justify-between'>
 							<h2 className='text-lg font-semibold text-gray-900'>
 								Quick Notes
@@ -167,7 +167,7 @@ export function DashboardPage() {
 					</div>
 
 					{/* Quick Links */}
-					<div className='rounded-lg bg-secondary p-6 shadow-sm ring-1 ring-gray-900/5'>
+					<div className='rounded-lg bg-secondary p-6 shadow-xs ring-1 ring-gray-900/5'>
 						<div className='mb-4 flex items-center justify-between'>
 							<h2 className='text-lg font-semibold text-gray-900'>
 								Quick Links
@@ -196,7 +196,7 @@ export function DashboardPage() {
 					</div>
 
 					{/* Recent Activity */}
-					<div className='rounded-lg bg-secondary p-6 shadow-sm ring-1 ring-gray-900/5'>
+					<div className='rounded-lg bg-secondary p-6 shadow-xs ring-1 ring-gray-900/5'>
 						<div className='mb-4 flex items-center justify-between'>
 							<h2 className='text-lg font-semibold text-gray-900'>
 								Recent Activity
@@ -210,7 +210,7 @@ export function DashboardPage() {
 					</div>
 
 					{/* Quick Actions */}
-					<div className='rounded-lg bg-secondary p-6 shadow-sm ring-1 ring-gray-900/5'>
+					<div className='rounded-lg bg-secondary p-6 shadow-xs ring-1 ring-gray-900/5'>
 						<div className='mb-4 flex items-center justify-between'>
 							<h2 className='text-lg font-semibold text-gray-900'>
 								Quick Actions
