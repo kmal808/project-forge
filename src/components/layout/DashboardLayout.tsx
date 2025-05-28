@@ -121,7 +121,7 @@ export function DashboardLayout() {
 				className={`transition-all duration-200 ${
 					sidebarOpen ? 'lg:pl-64' : ''
 				}`}>
-				<div className='sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-primary bg-primary px-4 shadow-sm sm:gap-x-6 sm:px-6 lg:px-8'>
+				<div className='sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-primary bg-primary px-4 shadow-xs sm:gap-x-6 sm:px-6 lg:px-8'>
 					<button
 						type='button'
 						className='-m-2.5 p-2.5 text-secondary hover:text-primary transition-colors'

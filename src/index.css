@@ -1,67 +1,117 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
 
-:root {
-	--color-bg-primary: #ffffff;
-	--color-bg-secondary: #f3f4f6;
-	--color-text-primary: #1a1a1a;
-	--color-text-secondary: #4b5563;
-	--color-border-primary: #e5e7eb;
-	--color-border-secondary: #d1d5db;
-	--color-accent: #ff5722; /* Windows Hawaii Orange */
-	--color-accent-hover: #f4511e; /* Darker Orange */
-	--color-button-text: #ffffff;
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-*: initial;
+  --color-transparent: transparent;
+  --color-current: currentColor;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+
+  --color-brand-orange: #ff5722;
+  --color-brand-black: #1a1a1a;
+  --color-brand-gold: #ffa726;
+
+  --background-color-primary: var(--color-bg-primary);
+  --background-color-secondary: var(--color-bg-secondary);
+
+  --text-color-primary: var(--color-text-primary);
+  --text-color-secondary: var(--color-text-secondary);
+
+  --border-color-primary: var(--color-border-primary);
+  --border-color-secondary: var(--color-border-secondary);
 }
 
-.dark {
-	--color-bg-primary: #2f2f2f;
-	--color-bg-secondary: #444444;
-	--color-text-primary: #f9fafb;
-	--color-text-secondary: #eec5b6;
-	--color-border-primary: #555555;
-	--color-border-secondary: #374151;
-	--color-accent: #ff5722;
-	--color-accent-hover: #ee7d5b;
-	--color-button-text: #ffffff;
+/*
+  The default border color has changed to `currentcolor` in Tailwind CSS v4,
+  so we've added these compatibility styles to make sure everything still
+  looks the same as it did with Tailwind CSS v3.
+
+  If we ever want to remove these styles, we need to add an explicit border
+  color utility to any element that depends on these defaults.
+*/
+@layer base {
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--color-gray-200, currentcolor);
+  }
 }
 
-.tokyo-night {
-	--color-bg-primary: #1a1b26;
-	--color-bg-secondary: #24283b;
-	--color-text-primary: #bbc0d8;
-	--color-text-secondary: #787c99;
-	--color-border-primary: #565f89;
-	--color-border-secondary: #555f78;
-	--color-accent: #0cab6d;
-	--color-accent-hover: #40a880;
-	--color-button-text: #ffffff;
+@utility btn-primary {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg bg-(--color-accent) px-4 py-2 text-(--color-button-text) shadow-xs hover:bg-(--color-accent-hover) transition-colors duration-200 font-medium;
 }
 
-.andromeda {
-	--color-bg-primary: #23262e;
-	--color-bg-secondary: #2f333d;
-	--color-text-primary: #e5e5e5;
-	--color-text-secondary: #a0a0a0;
-	--color-border-primary: #2f333d;
-	--color-border-secondary: #383c44;
-	--color-accent: #2298ff;
-	--color-accent-hover: #2c81ca;
-	--color-button-text: #ffffff;
+@utility btn-secondary {
+  @apply inline-flex items-center justify-center gap-2 rounded-lg border border-primary bg-primary px-4 py-2 text-primary shadow-xs hover:bg-secondary transition-colors duration-200 font-medium;
 }
 
-body {
-	@apply bg-primary text-primary transition-colors duration-200;
-}
+@layer utilities {
+  :root {
+    --color-bg-primary: #ffffff;
+    --color-bg-secondary: #f3f4f6;
+    --color-text-primary: #1a1a1a;
+    --color-text-secondary: #4b5563;
+    --color-border-primary: #e5e7eb;
+    --color-border-secondary: #d1d5db;
+    --color-accent: #ff5722; /* Windows Hawaii Orange */
+    --color-accent-hover: #f4511e; /* Darker Orange */
+    --color-button-text: #ffffff;
+  }
 
-@layer components {
-	.btn-primary {
-		@apply inline-flex items-center justify-center gap-2 rounded-lg bg-[var(--color-accent)] px-4 py-2 text-[var(--color-button-text)] shadow-sm hover:bg-[var(--color-accent-hover)] transition-colors duration-200 font-medium;
-	}
+  .dark {
+    --color-bg-primary: #2f2f2f;
+    --color-bg-secondary: #444444;
+    --color-text-primary: #f9fafb;
+    --color-text-secondary: #eec5b6;
+    --color-border-primary: #555555;
+    --color-border-secondary: #374151;
+    --color-accent: #ff5722;
+    --color-accent-hover: #ee7d5b;
+    --color-button-text: #ffffff;
+  }
 
-	.btn-secondary {
-		@apply inline-flex items-center justify-center gap-2 rounded-lg border border-primary bg-primary px-4 py-2 text-primary shadow-sm hover:bg-secondary transition-colors duration-200 font-medium;
-	}
+  .tokyo-night {
+    --color-bg-primary: #1a1b26;
+    --color-bg-secondary: #24283b;
+    --color-text-primary: #bbc0d8;
+    --color-text-secondary: #787c99;
+    --color-border-primary: #565f89;
+    --color-border-secondary: #555f78;
+    --color-accent: #0cab6d;
+    --color-accent-hover: #40a880;
+    --color-button-text: #ffffff;
+  }
+
+  .andromeda {
+    --color-bg-primary: #23262e;
+    --color-bg-secondary: #2f333d;
+    --color-text-primary: #e5e5e5;
+    --color-text-secondary: #a0a0a0;
+    --color-border-primary: #2f333d;
+    --color-border-secondary: #383c44;
+    --color-accent: #2298ff;
+    --color-accent-hover: #2c81ca;
+    --color-button-text: #ffffff;
+  }
+
+  body {
+    @apply bg-primary text-primary transition-colors duration-200;
+  }
 }
 
 input {
@@ -69,5 +119,5 @@ input {
 }
 
 input:focus {
-	@apply outline-none;
+	@apply outline-hidden;
 }

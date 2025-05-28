@@ -18,7 +18,7 @@ export function ThemeSelector() {
 			<select
 				value={theme}
 				onChange={(e) => setTheme(e.target.value as Theme)}
-				className='appearance-none rounded-lg border border-primary bg-secondary px-3 py-2 pr-8 text-sm shadow-sm'>
+				className='appearance-none rounded-lg border border-primary bg-secondary px-3 py-2 pr-8 text-sm shadow-xs'>
 				{themes.map(({ id, label }) => (
 					<option key={id} value={id}>
 						{label}

@@ -75,7 +75,7 @@ export function ColorStep({ selectedColor, onComplete }: ColorStepProps) {
             }`}>
             <div className='mb-4 flex items-center justify-between'>
               <div
-                className='h-12 w-12 rounded-full border shadow-sm'
+                className='h-12 w-12 rounded-full border shadow-xs'
                 style={{ backgroundColor: color.hex }}
               />
               <Paintbrush

@@ -64,7 +64,7 @@ export function DimensionsStep({ width = 24, height = 36, onComplete }: Dimensio
                   onChange={(e) =>
                     setDimensions({ ...dimensions, width: parseInt(e.target.value) || 0 })
                   }
-                  className={`block w-full rounded-md shadow-sm sm:text-sm ${
+                  className={`block w-full rounded-md shadow-xs sm:text-sm ${
                     errors.width
                       ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
                       : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
@@ -88,7 +88,7 @@ export function DimensionsStep({ width = 24, height = 36, onComplete }: Dimensio
                   onChange={(e) =>
                     setDimensions({ ...dimensions, height: parseInt(e.target.value) || 0 })
                   }
-                  className={`block w-full rounded-md shadow-sm sm:text-sm ${
+                  className={`block w-full rounded-md shadow-xs sm:text-sm ${
                     errors.height
                       ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
                       : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
@@ -124,7 +124,7 @@ export function DimensionsStep({ width = 24, height = 36, onComplete }: Dimensio
         <div className="flex justify-end">
           <button
             type="submit"
-            className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+            className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
           >
             Continue
           </button>

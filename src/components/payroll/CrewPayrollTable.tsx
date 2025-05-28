@@ -157,7 +157,7 @@ export function EmployeePayrollTable({
 												jobName: e.target.value,
 											})
 										}
-										className='w-full rounded border-gray-300 text-slate-900 text-sm'
+										className='w-full rounded-sm border-gray-300 text-slate-900 text-sm'
 									/>
 								</td>
 								<td className='whitespace-nowrap px-3 py-2'>
@@ -170,7 +170,7 @@ export function EmployeePayrollTable({
 												jobNumber: e.target.value,
 											})
 										}
-										className='w-full rounded border-gray-300 text-slate-900 text-sm'
+										className='w-full rounded-sm border-gray-300 text-slate-900 text-sm'
 									/>
 								</td>
 								{days.map((day, dayIndex) => (
@@ -185,7 +185,7 @@ export function EmployeePayrollTable({
 												newAmounts[dayIndex] = parseFloat(e.target.value) || 0
 												onEntryChange(index, { ...entry, amounts: newAmounts })
 											}}
-											className='w-full rounded border-gray-300 text-right text-slate-900 text-sm'
+											className='w-full rounded-sm border-gray-300 text-right text-slate-900 text-sm'
 										/>
 									</td>
 								))}
@@ -207,7 +207,7 @@ export function EmployeePayrollTable({
 										onChange={(e) =>
 											setNewEntry({ ...newEntry, jobName: e.target.value })
 										}
-										className='w-full rounded border-gray-300 text-slate-900 text-sm'
+										className='w-full rounded-sm border-gray-300 text-slate-900 text-sm'
 										placeholder='Job Name'
 										autoFocus
 									/>
@@ -219,7 +219,7 @@ export function EmployeePayrollTable({
 										onChange={(e) =>
 											setNewEntry({ ...newEntry, jobNumber: e.target.value })
 										}
-										className='w-full rounded border-gray-300 text-slate-900 text-sm'
+										className='w-full rounded-sm border-gray-300 text-slate-900 text-sm'
 										placeholder='Job #'
 									/>
 								</td>
@@ -235,7 +235,7 @@ export function EmployeePayrollTable({
 												amounts[dayIndex] = parseFloat(e.target.value) || 0
 												setNewEntry({ ...newEntry, amounts })
 											}}
-											className='w-full rounded border-gray-300 text-right text-slate-900 text-sm'
+											className='w-full rounded-sm border-gray-300 text-right text-slate-900 text-sm'
 											placeholder='0.00'
 										/>
 									</td>

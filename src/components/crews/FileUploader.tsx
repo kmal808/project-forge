@@ -78,7 +78,7 @@ export function FileUploader({ onUpload, accept = '*/*', multiple = true }: File
         <Upload className="mb-4 h-10 w-10 text-gray-400" />
         <div className="space-y-1 text-center">
           <p className="text-sm text-gray-600">
-            <label className="relative cursor-pointer rounded-md font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500">
+            <label className="relative cursor-pointer rounded-md font-medium text-indigo-600 focus-within:outline-hidden focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500">
               <span>Upload files</span>
               <input
                 type="file"
