@@ -11,6 +11,7 @@ import { useFiles } from '../../hooks/useFiles'
 import { useWalkthroughs } from '../../hooks/useWalkthroughs'
 import { ErrorBoundary } from '../ui/ErrorBoundary'
 import { LoadingSpinner } from '../ui/LoadingSpinner'
+import { MaterialItem, PunchListItem, FileUpload } from '../../types'
 
 export function CrewPortal() {
 	const {
@@ -69,7 +70,7 @@ export function CrewPortal() {
 		<div className='min-h-screen bg-secondary py-8'>
 			<div className='mx-auto max-w-7xl px-4 sm:px-6 lg:px-8'>
 				<div className='mb-8'>
-					<h1 className='text-3xl font-bold text-primary'>Crew Portal</h1>
+					<h1 className='text-3xl font-bold text-primary'>Installer Portal</h1>
 					<p className='mt-2 text-sm text-primary'>
 						Manage your job site tasks, materials, and documentation
 					</p>

@@ -1,25 +1,25 @@
-import React from 'react';
-import { Check } from 'lucide-react';
-import type { ConfiguratorStep } from '../../types';
+import React from 'react'
+import { Check } from 'lucide-react'
+import type { ConfiguratorStep } from '../../types'
 
 interface ConfiguratorStepperProps {
-  currentStep: ConfiguratorStep;
+	currentStep: ConfiguratorStep
 }
 
 const steps = [
-  { id: 'product-type', name: 'Product Type' },
-  { id: 'series', name: 'Series' },
-  { id: 'dimensions', name: 'Dimensions' },
-  { id: 'operation', name: 'Operation' },
-  { id: 'color', name: 'Color' },
-  { id: 'glass', name: 'Glass' },
-  { id: 'hardware', name: 'Hardware' },
-  { id: 'screen', name: 'Screen' },
-  { id: 'review', name: 'Review' },
-] as const;
+	{ id: 'product-type', name: 'Product Type' },
+	{ id: 'series', name: 'Series' },
+	{ id: 'dimensions', name: 'Dimensions' },
+	{ id: 'operation', name: 'Operation' },
+	{ id: 'color', name: 'Color' },
+	{ id: 'glass', name: 'Glass' },
+	{ id: 'hardware', name: 'Hardware' },
+	{ id: 'screen', name: 'Screen' },
+	{ id: 'review', name: 'Review' },
+] as const
 
 export function ConfiguratorStepper({ currentStep }: ConfiguratorStepperProps) {
-  const currentStepIndex = steps.findIndex((step) => step.id === currentStep);
+	const currentStepIndex = steps.findIndex((step) => step.id === currentStep)
 
   return (
     <nav aria-label="Progress" className="overflow-x-auto pb-4">

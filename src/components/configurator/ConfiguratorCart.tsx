@@ -1,4 +1,3 @@
-import React from 'react'
 import { X, FileDown, Send } from 'lucide-react'
 import type { ConfiguratorItem } from '../../types'
 
@@ -68,7 +67,7 @@ export function ConfiguratorCart({
 
 								<div className='mt-8'>
 									<div className='flow-root'>
-										<ul className='-my-6 divide-y divide-gray-200'>
+										<ul className='-my-6 divide-y divide-secondary'>
 											{items.map((item) => (
 												<li key={item.id} className='flex py-6'>
 													<div className='ml-4 flex flex-1 flex-col'>
@@ -104,7 +103,7 @@ export function ConfiguratorCart({
 								</div>
 							</div>
 
-							<div className='border-t border-gray-200 px-4 py-6 sm:px-6'>
+							<div className='border-t border-secondary px-4 py-6 sm:px-6'>
 								<div className='flex justify-between text-base font-medium text-primary'>
 									<p>Subtotal</p>
 									<p>${totalAmount}</p>

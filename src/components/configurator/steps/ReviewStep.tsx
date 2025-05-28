@@ -71,7 +71,7 @@ export function ReviewStep({ item, onAddToCart, onEdit }: ReviewStepProps) {
 				<h2 className='text-xl font-semibold text-primary'>
 					Review Configuration
 				</h2>
-				<p className='mt-1 text-sm text-gray-primary'>
+				<p className='mt-1 text-sm text-secondary'>
 					Review your selections and add to cart
 				</p>
 			</div>
@@ -107,10 +107,10 @@ export function ReviewStep({ item, onAddToCart, onEdit }: ReviewStepProps) {
 							<div
 								key={detail.label}
 								className='relative rounded-lg border border-gray-100 bg-gray-50 p-4'>
-								<dt className='text-sm font-medium text-gray-500'>
+								<dt className='text-sm font-medium text-secondary'>
 									{detail.label}
 								</dt>
-								<dd className='mt-1 text-sm text-gray-900'>{detail.value}</dd>
+								<dd className='mt-1 text-sm text-primary'>{detail.value}</dd>
 								<button
 									onClick={() => onEdit(detail.step as ConfiguratorStep)}
 									className='absolute right-4 top-4 text-indigo-600 hover:text-indigo-500'>
@@ -126,7 +126,7 @@ export function ReviewStep({ item, onAddToCart, onEdit }: ReviewStepProps) {
 						<div className='flex items-center space-x-4'>
 							<label
 								htmlFor='quantity'
-								className='text-sm font-medium text-gray-700'>
+								className='text-sm font-medium text-secondary'>
 								Quantity
 							</label>
 							<input
@@ -141,15 +141,15 @@ export function ReviewStep({ item, onAddToCart, onEdit }: ReviewStepProps) {
 							/>
 						</div>
 						<div className='text-right'>
-							<p className='text-sm font-medium text-gray-500'>Total Price</p>
-							<p className='text-2xl font-semibold text-gray-900'>
+							<p className='text-sm font-medium text-secondary'>Total Price</p>
+							<p className='text-2xl font-semibold text-primary'>
 								{formatPrice(calculatePrice())}
 							</p>
 						</div>
 					</div>
 				</div>
 
-				<div className='border-t border-gray-200 px-6 py-4'>
+				<div className='border-t border-secondary px-6 py-4'>
 					<button
 						onClick={handleAddToCart}
 						className='button-primary flex w-full items-center justify-center gap-2 rounded-md bg-indigo-600 px-6 py-3 text-base font-semibold text-primary shadow-xs hover:bg-indigo-500 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600'>

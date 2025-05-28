@@ -1,51 +1,58 @@
-import React from 'react';
-import { Ruler } from 'lucide-react';
+import React from 'react'
+import { Ruler } from 'lucide-react'
 
 interface DimensionsStepProps {
-  width?: number;
-  height?: number;
-  onComplete: (dimensions: { width: number; height: number }) => void;
+	width?: number
+	height?: number
+	onComplete: (dimensions: { width: number; height: number }) => void
 }
 
-export function DimensionsStep({ width = 24, height = 36, onComplete }: DimensionsStepProps) {
-  const [dimensions, setDimensions] = React.useState({ width, height });
-  const [errors, setErrors] = React.useState<{ width?: string; height?: string }>({});
+export function DimensionsStep({
+	width = 24,
+	height = 36,
+	onComplete,
+}: DimensionsStepProps) {
+	const [dimensions, setDimensions] = React.useState({ width, height })
+	const [errors, setErrors] = React.useState<{
+		width?: string
+		height?: string
+	}>({})
 
-  const validateDimensions = () => {
-    const newErrors: { width?: string; height?: string } = {};
-    
-    if (dimensions.width < 12) {
-      newErrors.width = 'Width must be at least 12 inches';
-    }
-    if (dimensions.width > 120) {
-      newErrors.width = 'Width cannot exceed 120 inches';
-    }
-    if (dimensions.height < 24) {
-      newErrors.height = 'Height must be at least 24 inches';
-    }
-    if (dimensions.height > 144) {
-      newErrors.height = 'Height cannot exceed 144 inches';
-    }
+	const validateDimensions = () => {
+		const newErrors: { width?: string; height?: string } = {}
 
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
+		if (dimensions.width < 24) {
+			newErrors.width = 'Width must be at least 24 inches'
+		}
+		if (dimensions.width > 144) {
+			newErrors.width = 'Width cannot exceed 144 inches'
+		}
+		if (dimensions.height < 12) {
+			newErrors.height = 'Height must be at least 12 inches'
+		}
+		if (dimensions.height > 96) {
+			newErrors.height = 'Height cannot exceed 96 inches'
+		}
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (validateDimensions()) {
-      onComplete(dimensions);
-    }
-  };
+		setErrors(newErrors)
+		return Object.keys(newErrors).length === 0
+	}
 
-  return (
-    <div className="space-y-6">
-      <div>
-        <h2 className="text-xl font-semibold text-gray-900">Enter Dimensions</h2>
-        <p className="mt-1 text-sm text-gray-500">
-          Specify the width and height in inches
-        </p>
-      </div>
+	const handleSubmit = (e: React.FormEvent) => {
+		e.preventDefault()
+		if (validateDimensions()) {
+			onComplete(dimensions)
+		}
+	}
+
+	return (
+		<div className='space-y-6'>
+			<div>
+				<h2 className='text-xl font-semibold text-primary'>Enter Dimensions</h2>
+				<p className='mt-1 text-sm text-secondary'>
+					Specify the width and height in inches
+				</p>
+			</div>
 
       <form onSubmit={handleSubmit} className="space-y-8">
         <div className="relative mx-auto max-w-md rounded-lg border-2 border-dashed border-gray-300 p-8">
@@ -101,25 +108,24 @@ export function DimensionsStep({ width = 24, height = 36, onComplete }: Dimensio
             </div>
           </div>
 
-          <div className="mt-8 flex justify-center">
-            <div className="relative">
-              <div
-                className="border-2 border-indigo-600"
-                style={{
-                  width: `${Math.min(300, dimensions.width * 2)}px`,
-                  height: `${Math.min(300, dimensions.height * 2)}px`,
-                }}
-              >
-                <div className="absolute -top-6 left-1/2 -translate-x-1/2 text-sm text-gray-600">
-                  {dimensions.width}"
-                </div>
-                <div className="absolute -left-6 top-1/2 -translate-y-1/2 -rotate-90 text-sm text-gray-600">
-                  {dimensions.height}"
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
+					<div className='mt-8 flex justify-center'>
+						<div className='relative'>
+							<div
+								className='border-2 border-primary'
+								style={{
+									width: `${Math.min(300, dimensions.width * 2)}px`,
+									height: `${Math.min(300, dimensions.height * 2)}px`,
+								}}>
+								<div className='absolute -top-6 left-1/2 -translate-x-1/2 text-sm text-secondary'>
+									{dimensions.width}"
+								</div>
+								<div className='absolute -left-6 top-1/2 -translate-y-1/2 -rotate-90 text-sm text-secondary'>
+									{dimensions.height}"
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
 
         <div className="flex justify-end">
           <button

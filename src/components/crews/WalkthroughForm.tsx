@@ -128,7 +128,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 
 			<div className='space-y-4'>
 				<div className='flex items-center justify-between'>
-					<h3 className='text-lg font-medium text-secondary'>
+					<h3 className='text-lg font-medium text-primary'>
 						Installation Issues
 					</h3>
 					<button
@@ -142,7 +142,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 				</div>
 
 				{formData.installationIssues.map((issue, index) => (
-					<div key={index} className='rounded-lg border border-gray-200 p-4'>
+					<div key={index} className='rounded-lg border border-secondary p-4'>
 						<div className='flex items-start justify-between'>
 							<div className='grow space-y-4'>
 								<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
@@ -165,7 +165,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 										/>
 									</div>
 									<div>
-										<label className='block text-sm font-medium text-gray-700'>
+										<label className='block text-sm font-medium text-secondary'>
 											Severity
 										</label>
 										<select
@@ -186,7 +186,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 									</div>
 								</div>
 								<div>
-									<label className='block text-sm font-medium text-gray-700'>
+									<label className='block text-sm font-medium text-secondary'>
 										Resolution
 									</label>
 									<textarea
@@ -207,7 +207,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 							<button
 								type='button'
 								onClick={() => removeIssue('installation', index)}
-								className='ml-4 text-gray-400 hover:text-gray-500'>
+								className='ml-4 text-secondary hover:accent-hover'>
 								<Minus className='h-5 w-5' />
 							</button>
 						</div>
@@ -217,7 +217,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 
 			<div className='space-y-4'>
 				<div className='flex items-center justify-between'>
-					<h3 className='text-lg font-medium text-gray-900'>
+					<h3 className='text-lg font-medium text-primary'>
 						Manufacturing Issues
 					</h3>
 					<button
@@ -230,12 +230,12 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 				</div>
 
 				{formData.manufacturingIssues.map((issue, index) => (
-					<div key={index} className='rounded-lg border border-gray-200 p-4'>
+					<div key={index} className='rounded-lg border border-secondary p-4'>
 						<div className='flex items-start justify-between'>
 							<div className='grow space-y-4'>
 								<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
 									<div>
-										<label className='block text-sm font-medium text-gray-700'>
+										<label className='block text-sm font-medium text-secondary'>
 											Description
 										</label>
 										<input
@@ -253,7 +253,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 										/>
 									</div>
 									<div>
-										<label className='block text-sm font-medium text-gray-700'>
+										<label className='block text-sm font-medium text-secondary'>
 											Severity
 										</label>
 										<select
@@ -274,7 +274,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 									</div>
 								</div>
 								<div>
-									<label className='block text-sm font-medium text-gray-700'>
+									<label className='block text-sm font-medium text-secondary'>
 										Resolution
 									</label>
 									<textarea
@@ -295,7 +295,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 							<button
 								type='button'
 								onClick={() => removeIssue('manufacturing', index)}
-								className='ml-4 text-gray-400 hover:text-gray-500'>
+								className='ml-4 text-secondary hover:accent-hover'>
 								<Minus className='h-5 w-5' />
 							</button>
 						</div>
@@ -304,14 +304,14 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 			</div>
 
 			<div className='space-y-4'>
-				<h3 className='text-lg font-medium text-gray-900'>
+				<h3 className='text-lg font-medium text-primary'>
 					Payment Information
 				</h3>
 				<div className='grid grid-cols-1 gap-6 sm:grid-cols-2'>
 					<div>
 						<label
 							htmlFor='paymentStatus'
-							className='block text-sm font-medium text-gray-700'>
+							className='block text-sm font-medium text-secondary'>
 							Payment Status
 						</label>
 						<select
@@ -334,12 +334,12 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 					<div>
 						<label
 							htmlFor='paymentAmount'
-							className='block text-sm font-medium text-gray-700'>
+							className='block text-sm font-medium text-secondary'>
 							Payment Amount
 						</label>
 						<div className='relative mt-1 rounded-md shadow-xs'>
 							<div className='pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3'>
-								<DollarSign className='h-5 w-5 text-gray-400' />
+								<DollarSign className='h-5 w-5 text-secondary' />
 							</div>
 							<input
 								type='number'
@@ -351,7 +351,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 										paymentAmount: parseFloat(e.target.value) || 0,
 									})
 								}
-								className='block w-full rounded-md border-gray-300 pl-10 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+								className='block w-full rounded-md border-secondary pl-10 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
 								min='0'
 								step='0.01'
 							/>
@@ -373,7 +373,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 					/>
 					<label
 						htmlFor='followUpNeeded'
-						className='text-sm font-medium text-gray-700'>
+						className='text-sm font-medium text-secondary'>
 						Follow-up Needed
 					</label>
 				</div>
@@ -382,7 +382,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 					<div>
 						<label
 							htmlFor='followUpNotes'
-							className='block text-sm font-medium text-gray-700'>
+							className='block text-sm font-medium text-secondary'>
 							Follow-up Notes
 						</label>
 						<textarea
@@ -399,7 +399,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 			</div>
 
 			<div className='space-y-4'>
-				<h3 className='text-lg font-medium text-gray-900'>Photos</h3>
+				<h3 className='text-lg font-medium text-primary'>Photos</h3>
 				<FileUploader
 					onUpload={handleFileUpload}
 					accept='image/*'
