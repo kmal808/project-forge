@@ -28,4 +28,4 @@ dist-ssr
 *.zip
 **/*.zip
 .bolt
-
+.cursor/*

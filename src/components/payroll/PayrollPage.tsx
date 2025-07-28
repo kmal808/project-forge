@@ -83,6 +83,16 @@ export function PayrollPage() {
 		}
 	}
 
+	const handleDeleteCrew = async (crewId: string) => {
+		if (
+			window.confirm(
+				'Are you sure you want to delete this crew? This action cannot be undone.'
+			)
+		) {
+			await deleteCrew(crewId)
+		}
+	}
+
 	const handleEntryChange = (
 		crewId: string,
 		employeeId: string,
@@ -134,6 +144,7 @@ export function PayrollPage() {
 			const key = `${crewId}-${employeeId}`
 			setDraftEntries((prev) => {
 				const newDrafts = { ...prev }
+
 				delete newDrafts[key]
 				return newDrafts
 			})
@@ -215,6 +226,7 @@ export function PayrollPage() {
 									<EmployeePayrollTable
 										key={employee.employeeId}
 										employeeId={employee.employeeId}
+										crewId={crew.crewId}
 										employeeName={employee.name}
 										onNameChange={(name) =>
 											handleUpdateEmployeeName(
@@ -224,6 +236,7 @@ export function PayrollPage() {
 											)
 										}
 										onDelete={() => handleDeleteEmployee(employee.employeeId)}
+										onDeleteCrew={() => handleDeleteCrew(crew.crewId)}
 										entries={employeeEntries}
 										onEntryChange={(index, entry) =>
 											handleEntryChange(
