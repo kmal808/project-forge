@@ -8,7 +8,7 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | null>(null);
 
-const themes: Theme[] = ['light', 'dark', 'tokyo-night', 'andromeda'];
+const themes: Theme[] = ['light', 'dark', 'tokyo-night', 'andromeda', 'nordic', 'sunset', 'ocean', 'forest'];
 
 export function ThemeProvider({ children }: { children: React.ReactNode }) {
   const [theme, setTheme] = useState<Theme>(() => {
@@ -21,7 +21,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     const root = window.document.documentElement;
     
     // Remove all theme classes
-    root.classList.remove('light', 'dark', 'tokyo-night', 'andromeda');
+    root.classList.remove('light', 'dark', 'tokyo-night', 'andromeda', 'nordic', 'sunset', 'ocean', 'forest');
     
     // Add current theme class
     root.classList.add(theme);

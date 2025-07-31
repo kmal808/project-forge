@@ -134,7 +134,7 @@ export interface ConfiguratorQuote {
   totalAmount: number;
 }
 
-export type Theme = 'light' | 'dark' | 'tokyo-night' | 'andromeda';
+export type Theme = 'light' | 'dark' | 'tokyo-night' | 'andromeda' | 'nordic' | 'sunset' | 'ocean' | 'forest';
 
 export type UserRole = 'admin' | 'warehouse' | 'sales' | 'crew';
 
