@@ -54,59 +54,69 @@ export function DimensionsStep({
 				</p>
 			</div>
 
-      <form onSubmit={handleSubmit} className="space-y-8">
-        <div className="relative mx-auto max-w-md rounded-lg border-2 border-dashed border-gray-300 p-8">
-          <Ruler className="mx-auto mb-6 h-12 w-12 text-gray-400" />
-          
-          <div className="grid grid-cols-2 gap-6">
-            <div>
-              <label htmlFor="width" className="block text-sm font-medium text-gray-700">
-                Width (inches)
-              </label>
-              <div className="mt-1">
-                <input
-                  type="number"
-                  id="width"
-                  value={dimensions.width}
-                  onChange={(e) =>
-                    setDimensions({ ...dimensions, width: parseInt(e.target.value) || 0 })
-                  }
-                  className={`block w-full rounded-md shadow-xs sm:text-sm ${
-                    errors.width
-                      ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-                      : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
-                  }`}
-                />
-                {errors.width && (
-                  <p className="mt-1 text-sm text-red-600">{errors.width}</p>
-                )}
-              </div>
-            </div>
+			<form onSubmit={handleSubmit} className='space-y-8'>
+				<div className='relative mx-auto max-w-md rounded-lg border-2 border-dashed border-gray-300 p-8'>
+					<Ruler className='mx-auto mb-6 h-12 w-12 text-gray-400' />
 
-            <div>
-              <label htmlFor="height" className="block text-sm font-medium text-gray-700">
-                Height (inches)
-              </label>
-              <div className="mt-1">
-                <input
-                  type="number"
-                  id="height"
-                  value={dimensions.height}
-                  onChange={(e) =>
-                    setDimensions({ ...dimensions, height: parseInt(e.target.value) || 0 })
-                  }
-                  className={`block w-full rounded-md shadow-xs sm:text-sm ${
-                    errors.height
-                      ? 'border-red-300 focus:border-red-500 focus:ring-red-500'
-                      : 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
-                  }`}
-                />
-                {errors.height && (
-                  <p className="mt-1 text-sm text-red-600">{errors.height}</p>
-                )}
-              </div>
-            </div>
-          </div>
+					<div className='grid grid-cols-2 gap-6'>
+						<div>
+							<label
+								htmlFor='width'
+								className='block text-sm font-medium text-gray-700'>
+								Width (inches)
+							</label>
+							<div className='mt-1'>
+								<input
+									type='number'
+									id='width'
+									value={dimensions.width}
+									onChange={(e) =>
+										setDimensions({
+											...dimensions,
+											width: parseInt(e.target.value) || 0,
+										})
+									}
+									className={`block w-full rounded-md shadow-xs sm:text-sm ${
+										errors.width
+											? 'border-red-300 focus:border-red-500 focus:ring-red-500'
+											: 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
+									}`}
+								/>
+								{errors.width && (
+									<p className='mt-1 text-sm text-red-600'>{errors.width}</p>
+								)}
+							</div>
+						</div>
+
+						<div>
+							<label
+								htmlFor='height'
+								className='block text-sm font-medium text-gray-700'>
+								Height (inches)
+							</label>
+							<div className='mt-1'>
+								<input
+									type='number'
+									id='height'
+									value={dimensions.height}
+									onChange={(e) =>
+										setDimensions({
+											...dimensions,
+											height: parseInt(e.target.value) || 0,
+										})
+									}
+									className={`block w-full rounded-md shadow-xs sm:text-sm ${
+										errors.height
+											? 'border-red-300 focus:border-red-500 focus:ring-red-500'
+											: 'border-gray-300 focus:border-indigo-500 focus:ring-indigo-500'
+									}`}
+								/>
+								{errors.height && (
+									<p className='mt-1 text-sm text-red-600'>{errors.height}</p>
+								)}
+							</div>
+						</div>
+					</div>
 
 					<div className='mt-8 flex justify-center'>
 						<div className='relative'>
@@ -127,15 +137,12 @@ export function DimensionsStep({
 					</div>
 				</div>
 
-        <div className="flex justify-end">
-          <button
-            type="submit"
-            className="rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500 focus-visible:outline-solid focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-          >
-            Continue
-          </button>
-        </div>
-      </form>
-    </div>
-  );
+				<div className='flex justify-end'>
+					<button type='submit' className='btn-primary'>
+						Continue
+					</button>
+				</div>
+			</form>
+		</div>
+	)
 }
