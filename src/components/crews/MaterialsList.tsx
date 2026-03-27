@@ -1,6 +1,6 @@
 import React from 'react'
 import { MaterialItem } from '../../types'
-import { Plus, Package2, CheckCircle, Clock } from 'lucide-react'
+import { Plus, Package2, CheckCircle, Clock, Trash2 } from 'lucide-react'
 
 interface MaterialsListProps {
 	items: MaterialItem[]
@@ -119,7 +119,7 @@ export function MaterialsList({
 						rows={2}
 						value={newItem.notes}
 						onChange={(e) => setNewItem({ ...newItem, notes: e.target.value })}
-						className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+						className='mt-1 block w-full rounded-md border border-gray-300 bg-white text-gray-700 shadow-xs ring-1 ring-inset ring-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
 					/>
 				</div>
 
@@ -193,7 +193,8 @@ export function MaterialsList({
 									<button
 										onClick={() => onDeleteItem(item.id)}
 										className='text-red-600 hover:text-red-900'>
-										Delete
+										<Trash2 className='h-4 w-4' />
+										<span className='sr-only'>Delete</span>
 									</button>
 								</td>
 							</tr>

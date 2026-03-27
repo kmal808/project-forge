@@ -85,9 +85,12 @@ export function InventoryPage() {
 	return (
 		<div className='space-y-6'>
 			<div className='flex items-center justify-between'>
-				<h2 className='text-2xl font-bold text-secondary'>
-					Container {selectedContainer?.containerNumber}
-				</h2>
+				<div>
+					<h2 className='text-2xl font-bold text-secondary'>Container</h2>
+					<p className='mt-1 text-sm font-semibold text-secondary'>
+						{selectedContainer?.containerNumber || '-'}
+					</p>
+				</div>
 				<div className='flex items-center gap-4'>
 					<label className='cursor-pointer rounded-lg bg-primary px-4 py-2 text-sm font-semibold text-secondary shadow-xs ring-1 ring-inset ring-gray-300 hover:accent hover:text-secondary hover:accent-hover'>
 						<div className='flex items-center gap-2'>

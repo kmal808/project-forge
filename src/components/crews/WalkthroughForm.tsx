@@ -223,7 +223,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 					<button
 						type='button'
 						onClick={() => addIssue('manufacturing')}
-						className='inline-flex items-center gap-2 rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500'>
+						className='btn-primary'>
 						<Plus className='h-4 w-4' />
 						Add Issue
 					</button>
@@ -410,7 +410,7 @@ export function WalkthroughForm({ onSubmit }: WalkthroughFormProps) {
 			<div className='flex justify-end'>
 				<button
 					type='submit'
-					className='inline-flex items-center gap-2 rounded-md bg-indigo-600 px-4 py-2 text-sm font-semibold text-white shadow-xs hover:bg-indigo-500'>
+					className='btn-primary'>
 					Submit Walkthrough
 				</button>
 			</div>

@@ -190,8 +190,8 @@ export function PayrollPage() {
 	const exportPayrollPDF = async () => {
 		try {
 			toast.loading('Generating PDF...', { id: 'pdf-export' })
-			
-			// Create a container for the PDF content
+
+			// Create a hidden container for print rendering
 			const printContainer = document.createElement('div')
 			printContainer.style.cssText = `
 				position: absolute;
@@ -202,119 +202,232 @@ export function PayrollPage() {
 				padding: 20px;
 				font-family: system-ui, -apple-system, sans-serif;
 			`
-			
-			// Generate PDF content
+
+			// Build print HTML with crew and employee blocks.
 			const date = new Date().toLocaleDateString()
 			printContainer.innerHTML = `
-				<div style="margin-bottom: 30px; text-align: center;">
+				<div data-pdf-block="report-header" style="margin-bottom: 24px; text-align: center;">
 					<h1 style="font-size: 24px; font-weight: bold; margin: 0; color: #1f2937;">Payroll Report</h1>
 					<p style="font-size: 14px; color: #6b7280; margin: 5px 0 0 0;">Generated on ${date}</p>
 				</div>
-				${crews.map(crew => {
-					const crewTotal = crew.employees.reduce((total, emp) => 
-						total + emp.entries.reduce((empTotal, entry) => 
-							empTotal + entry.amounts.reduce((sum, amount) => sum + amount, 0), 0), 0)
-					
+				${crews
+					.map((crew) => {
+						const crewTotal = crew.employees.reduce(
+							(total, emp) =>
+								total +
+								emp.entries.reduce(
+									(empTotal, entry) =>
+										empTotal +
+										entry.amounts.reduce((sum, amount) => sum + amount, 0),
+									0
+								),
+							0
+						)
+
+						const employeeBlocks =
+							crew.employees.length === 0
+								? `
+						<div data-pdf-block="employee" style="margin-bottom: 24px; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px;">
+							<h3 style="font-size: 16px; font-weight: 500; margin: 0; color: #374151;">
+								No employees
+							</h3>
+						</div>`
+								: crew.employees
+										.map((employee) => {
+											const employeeTotal = employee.entries.reduce(
+												(total, entry) =>
+													total +
+													entry.amounts.reduce((sum, amount) => sum + amount, 0),
+												0
+											)
+
+											if (employee.entries.length === 0) {
+												return `
+								<div data-pdf-block="employee" style="margin-bottom: 24px; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px;">
+									<h3 style="font-size: 16px; font-weight: 500; margin: 0; color: #374151;">
+										${employee.name} - No entries
+									</h3>
+								</div>
+							`
+											}
+
+											return `
+							<div data-pdf-block="employee" style="margin-bottom: 24px; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px;">
+								<h3 style="font-size: 16px; font-weight: 500; margin: 0 0 12px 0; color: #374151;">
+									${employee.name} - Total: $${employeeTotal.toFixed(2)}
+								</h3>
+								<table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+									<thead>
+										<tr style="background-color: #f9fafb;">
+											<th style="border: 1px solid #d1d5db; padding: 8px; text-align: left; font-weight: 600;">Job</th>
+											<th style="border: 1px solid #d1d5db; padding: 8px; text-align: left; font-weight: 600;">#</th>
+											<th style="border: 1px solid #d1d5db; padding: 8px; text-align: center; font-weight: 600;">Sun</th>
+											<th style="border: 1px solid #d1d5db; padding: 8px; text-align: center; font-weight: 600;">Mon</th>
+											<th style="border: 1px solid #d1d5db; padding: 8px; text-align: center; font-weight: 600;">Tue</th>
+											<th style="border: 1px solid #d1d5db; padding: 8px; text-align: center; font-weight: 600;">Wed</th>
+											<th style="border: 1px solid #d1d5db; padding: 8px; text-align: center; font-weight: 600;">Thu</th>
+											<th style="border: 1px solid #d1d5db; padding: 8px; text-align: center; font-weight: 600;">Fri</th>
+											<th style="border: 1px solid #d1d5db; padding: 8px; text-align: center; font-weight: 600;">Sat</th>
+										</tr>
+									</thead>
+									<tbody>
+										${employee.entries
+											.map(
+												(entry) => `
+											<tr>
+												<td style="border: 1px solid #d1d5db; padding: 8px;">${entry.jobName}</td>
+												<td style="border: 1px solid #d1d5db; padding: 8px;">${entry.jobNumber}</td>
+												${entry.amounts
+													.map(
+														(amount) => `
+													<td style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">
+														${amount > 0 ? '$' + amount.toFixed(2) : '-'}
+													</td>
+												`
+													)
+													.join('')}
+											</tr>
+										`
+											)
+											.join('')}
+									</tbody>
+								</table>
+							</div>
+						`
+										})
+										.join('')
+
 					return `
-						<div style="margin-bottom: 40px; page-break-inside: avoid;">
+						<div data-pdf-block="crew-header" style="margin-bottom: 12px;">
 							<h2 style="font-size: 20px; font-weight: 600; margin-bottom: 20px; color: #1f2937; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px;">
 								${crew.crewName} - Total: $${crewTotal.toFixed(2)}
 							</h2>
-							${crew.employees.map(employee => {
-								const employeeTotal = employee.entries.reduce((total, entry) => 
-									total + entry.amounts.reduce((sum, amount) => sum + amount, 0), 0)
-								
-								if (employee.entries.length === 0) {
-									return `
-										<div style="margin-bottom: 20px;">
-											<h3 style="font-size: 16px; font-weight: 500; margin-bottom: 10px; color: #374151;">
-												${employee.name} - No entries
-											</h3>
-										</div>
-									`
-								}
-								
-								return `
-									<div style="margin-bottom: 30px; page-break-inside: avoid; break-inside: avoid;">
-										<h3 style="font-size: 16px; font-weight: 500; margin-bottom: 15px; color: #374151;">
-											${employee.name} - Total: $${employeeTotal.toFixed(2)}
-										</h3>
-										<table style="width: 100%; border-collapse: collapse; font-size: 12px; margin-bottom: 10px; page-break-inside: avoid; break-inside: avoid;">
-											<thead>
-												<tr style="background-color: #f9fafb;">
-													<th style="border: 1px solid #d1d5db; padding: 8px; text-align: left; font-weight: 600;">Job</th>
-													<th style="border: 1px solid #d1d5db; padding: 8px; text-align: left; font-weight: 600;">#</th>
-													<th style="border: 1px solid #d1d5db; padding: 8px; text-align: center; font-weight: 600;">Sun</th>
-													<th style="border: 1px solid #d1d5db; padding: 8px; text-align: center; font-weight: 600;">Mon</th>
-													<th style="border: 1px solid #d1d5db; padding: 8px; text-align: center; font-weight: 600;">Tue</th>
-													<th style="border: 1px solid #d1d5db; padding: 8px; text-align: center; font-weight: 600;">Wed</th>
-													<th style="border: 1px solid #d1d5db; padding: 8px; text-align: center; font-weight: 600;">Thu</th>
-													<th style="border: 1px solid #d1d5db; padding: 8px; text-align: center; font-weight: 600;">Fri</th>
-													<th style="border: 1px solid #d1d5db; padding: 8px; text-align: center; font-weight: 600;">Sat</th>
-												</tr>
-											</thead>
-											<tbody>
-												${employee.entries.map(entry => `
-													<tr>
-														<td style="border: 1px solid #d1d5db; padding: 8px;">${entry.jobName}</td>
-														<td style="border: 1px solid #d1d5db; padding: 8px;">${entry.jobNumber}</td>
-														${entry.amounts.map(amount => `
-															<td style="border: 1px solid #d1d5db; padding: 8px; text-align: right;">
-																${amount > 0 ? '$' + amount.toFixed(2) : '-'}
-															</td>
-														`).join('')}
-													</tr>
-												`).join('')}
-											</tbody>
-										</table>
-									</div>
-								`
-							}).join('')}
 						</div>
+						${employeeBlocks}
 					`
-				}).join('')}
+					})
+					.join('')}
 			`
-			
+
 			document.body.appendChild(printContainer)
-			
-			// Capture the content as canvas
-			const canvas = await html2canvas(printContainer, {
-				scale: 2,
-				useCORS: true,
-				allowTaint: true,
-				backgroundColor: '#ffffff'
-			})
-			
-			// Remove the temporary container
-			document.body.removeChild(printContainer)
-			
-			// Create PDF
-			const imgData = canvas.toDataURL('image/png')
+
+			// Create PDF and add each block with page-aware layout
 			const pdf = new jsPDF({
 				orientation: 'portrait',
 				unit: 'mm',
-				format: 'a4'
+				format: 'a4',
 			})
-			
-			const imgWidth = 210
-			const pageHeight = 295
-			const imgHeight = (canvas.height * imgWidth) / canvas.width
-			let heightLeft = imgHeight
-			let position = 0
-			
-			pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
-			heightLeft -= pageHeight
-			
-			while (heightLeft >= 0) {
-				position = heightLeft - imgHeight
-				pdf.addPage()
-				pdf.addImage(imgData, 'PNG', 0, position, imgWidth, imgHeight)
-				heightLeft -= pageHeight
+
+			const margin = 10
+			const pageWidth = pdf.internal.pageSize.getWidth()
+			const pageHeight = pdf.internal.pageSize.getHeight()
+			const contentWidth = pageWidth - margin * 2
+			const maxContentHeight = pageHeight - margin * 2
+			let currentY = margin
+
+			const blocks = Array.from(
+				printContainer.querySelectorAll<HTMLElement>('[data-pdf-block]')
+			)
+			let hasRenderedCrew = false
+
+			for (const block of blocks) {
+				const blockType = block.getAttribute('data-pdf-block')
+
+				// Start each crew on a new page for cleaner accountant-ready exports.
+				if (blockType === 'crew-header') {
+					if (hasRenderedCrew) {
+						pdf.addPage()
+						currentY = margin
+					}
+					hasRenderedCrew = true
+				}
+
+				const canvas = await html2canvas(block, {
+					scale: 2,
+					useCORS: true,
+					allowTaint: true,
+					backgroundColor: '#ffffff',
+				})
+
+				const blockHeightMm = (canvas.height * contentWidth) / canvas.width
+
+				// If block fits on a fresh page but not current remainder, page-break before block.
+				if (
+					blockHeightMm <= maxContentHeight &&
+					currentY + blockHeightMm > pageHeight - margin
+				) {
+					pdf.addPage()
+					currentY = margin
+				}
+
+				if (blockHeightMm <= maxContentHeight) {
+					pdf.addImage(
+						canvas.toDataURL('image/png'),
+						'PNG',
+						margin,
+						currentY,
+						contentWidth,
+						blockHeightMm
+					)
+					currentY += blockHeightMm + 2
+					continue
+				}
+
+				// Oversized block fallback: slice only this block across pages.
+				const maxSliceHeightPx = Math.floor(
+					(maxContentHeight * canvas.width) / contentWidth
+				)
+				let sourceY = 0
+				while (sourceY < canvas.height) {
+					const sliceHeightPx = Math.min(maxSliceHeightPx, canvas.height - sourceY)
+					const sliceCanvas = document.createElement('canvas')
+					sliceCanvas.width = canvas.width
+					sliceCanvas.height = sliceHeightPx
+					const ctx = sliceCanvas.getContext('2d')
+					if (!ctx) break
+
+					ctx.drawImage(
+						canvas,
+						0,
+						sourceY,
+						canvas.width,
+						sliceHeightPx,
+						0,
+						0,
+						canvas.width,
+						sliceHeightPx
+					)
+
+					const sliceHeightMm = (sliceHeightPx * contentWidth) / canvas.width
+					if (currentY + sliceHeightMm > pageHeight - margin) {
+						pdf.addPage()
+						currentY = margin
+					}
+
+					pdf.addImage(
+						sliceCanvas.toDataURL('image/png'),
+						'PNG',
+						margin,
+						currentY,
+						contentWidth,
+						sliceHeightMm
+					)
+
+					currentY += sliceHeightMm + 1
+					sourceY += sliceHeightPx
+				}
+
+				if (currentY > pageHeight - margin - 10) {
+					pdf.addPage()
+					currentY = margin
+				}
 			}
-			
+
+			document.body.removeChild(printContainer)
+
 			const filename = `payroll-report-${new Date().toISOString().split('T')[0]}.pdf`
 			pdf.save(filename)
-			
+
 			toast.success('PDF exported successfully!', { id: 'pdf-export' })
 		} catch (error) {
 			console.error('Error generating PDF:', error)

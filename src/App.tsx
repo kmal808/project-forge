@@ -1,4 +1,3 @@
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { DashboardLayout } from './components/layout/DashboardLayout';
 import { Toaster } from 'sonner';
@@ -11,6 +10,8 @@ import { LoginPage } from './components/auth/LoginPage';
 import { AuthProvider } from './contexts/AuthContext';
 import { ThemeProvider } from './contexts/ThemeContext';
 import { ProtectedRoute } from './components/auth/ProtectedRoute';
+import { RoleRoute } from './components/auth/RoleRoute';
+import { AdminUsersPage } from './components/admin/AdminUsersPage';
 
 function App() {
   return (
@@ -26,9 +27,23 @@ function App() {
             <Route element={<ProtectedRoute />}>
               <Route element={<DashboardLayout />}>
                 <Route path="/dashboard" element={<DashboardPage />} />
-                <Route path="/inventory" element={<InventoryPage />} />
-                <Route path="/inventory/:containerId" element={<InventoryPage />} />
-                <Route path="/crews" element={<CrewPortal />} />
+
+                {/* Warehouse-only (admin always allowed) */}
+                <Route element={<RoleRoute allow={['warehouse']} />}>
+                  <Route path="/inventory" element={<InventoryPage />} />
+                  <Route path="/inventory/:containerId" element={<InventoryPage />} />
+                </Route>
+
+                {/* Crew + Warehouse (admin always allowed) */}
+                <Route element={<RoleRoute allow={['crew', 'warehouse']} />}>
+                  <Route path="/crews" element={<CrewPortal />} />
+                </Route>
+
+                {/* Admin-only */}
+                <Route element={<RoleRoute allow={['admin']} />}>
+                  <Route path="/admin/users" element={<AdminUsersPage />} />
+                </Route>
+
                 <Route path="/payroll" element={<PayrollPage />} />
                 <Route path="/configurator" element={<ConfiguratorPage />} />
               </Route>

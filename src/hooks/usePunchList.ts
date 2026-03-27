@@ -2,8 +2,10 @@ import React from 'react';
 import { supabase } from '../lib/supabase';
 import { toast } from 'sonner';
 import type { PunchListItem } from '../types';
+import { useAuth } from '../contexts/AuthContext';
 
 export function usePunchList() {
+  const { user } = useAuth();
   const [items, setItems] = React.useState<PunchListItem[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<Error | null>(null);
@@ -11,10 +13,17 @@ export function usePunchList() {
   const fetchItems = React.useCallback(async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase
+      let query = supabase
         .from('punch_list')
         .select('*')
         .order('created_at', { ascending: false });
+
+      // Crew users should only see their own records.
+      if (user?.role === 'crew') {
+        query = query.eq('user_id', user.id);
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
       setItems(data || []);
@@ -24,7 +33,7 @@ export function usePunchList() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [user?.id, user?.role]);
 
   React.useEffect(() => {
     fetchItems();

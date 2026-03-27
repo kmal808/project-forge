@@ -2,8 +2,10 @@ import React from 'react';
 import { supabase } from '../lib/supabase';
 import { toast } from 'sonner';
 import type { FileUpload } from '../types';
+import { useAuth } from '../contexts/AuthContext';
 
 export function useFiles() {
+  const { user } = useAuth();
   const [files, setFiles] = React.useState<FileUpload[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<Error | null>(null);
@@ -11,10 +13,17 @@ export function useFiles() {
   const fetchFiles = React.useCallback(async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase
+      let query = supabase
         .from('files')
         .select('*')
         .order('created_at', { ascending: false });
+
+      // Crew users should only see their own records.
+      if (user?.role === 'crew') {
+        query = query.eq('user_id', user.id);
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
       setFiles(data || []);
@@ -24,7 +33,7 @@ export function useFiles() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [user?.id, user?.role]);
 
   React.useEffect(() => {
     fetchFiles();

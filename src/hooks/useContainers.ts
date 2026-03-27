@@ -23,7 +23,11 @@ export function useContainers() {
 
       const containersWithCount = data?.map((container) => ({
         id: container.id,
-        containerNumber: container.name,
+        // The DB column appears to be `container_number` (we write to it on insert),
+        // but older rows may still have `name` populated.
+        containerNumber: String(
+          container.container_number ?? container.name ?? ''
+        ),
         createdAt: container.created_at,
         updatedAt: container.updated_at,
         userId: container.user_id,

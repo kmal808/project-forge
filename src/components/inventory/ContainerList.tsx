@@ -1,7 +1,7 @@
 import React from 'react'
 import { useContainers } from '../../hooks/useContainers'
-import { Package2, Plus } from 'lucide-react'
-import { Link, useParams } from 'react-router-dom'
+import { Package2, Plus, Trash2 } from 'lucide-react'
+import { Link, useNavigate, useParams } from 'react-router-dom'
 import { toast } from 'sonner'
 
 interface ContainerListProps {
@@ -10,7 +10,9 @@ interface ContainerListProps {
 
 export function ContainerList({ collapsed = false }: ContainerListProps) {
 	const { containerId } = useParams()
-	const { containers, isLoading, addContainer } = useContainers()
+	const { containers, isLoading, addContainer, deleteContainer } =
+		useContainers()
+	const navigate = useNavigate()
 	const [showNewContainer, setShowNewContainer] = React.useState(false)
 	const [containerNumber, setContainerNumber] = React.useState('')
 
@@ -31,6 +33,26 @@ export function ContainerList({ collapsed = false }: ContainerListProps) {
 		}
 	}
 
+	const handleDeleteContainer = async (id: string, name: string) => {
+		if (
+			!window.confirm(
+				`Are you sure you want to delete container "${name}"? This action cannot be undone.`
+			)
+		) {
+			return
+		}
+
+		try {
+			await deleteContainer(id)
+			// If the deleted container was selected, go back to the empty state.
+			if (containerId === id) navigate('/inventory')
+		} catch (error) {
+			console.error('Failed to delete container:', error)
+			// `deleteContainer` already toasts; keep this as a safety net.
+			toast.error('Failed to delete container')
+		}
+	}
+
 	if (isLoading) {
 		return (
 			<div className='flex items-center justify-center py-4'>
@@ -40,7 +62,7 @@ export function ContainerList({ collapsed = false }: ContainerListProps) {
 	}
 
 	return (
-		<div className='space-y-2'>
+		<div className={collapsed ? 'space-y-1' : 'space-y-2'}>
 			{showNewContainer ? (
 				<form
 					onSubmit={handleSubmit}
@@ -80,27 +102,46 @@ export function ContainerList({ collapsed = false }: ContainerListProps) {
 			)}
 
 			{containers.map((container) => (
-				<Link
+				<div
 					key={container.id}
-					to={`/inventory/${container.id}`}
 					className={`flex items-center justify-between rounded-md px-2 py-1.5 text-sm ${
 						containerId === container.id
-							? 'bg-brand-orange text-white'
-							: 'text-gray-600 hover:bg-gray-100'
+							? 'bg-brand-orange text-primary'
+							: 'text-primary hover:bg-gray-100'
 					}`}>
+					<Link
+						to={`/inventory/${container.id}`}
+						className='flex min-w-0 flex-1 items-center gap-2'>
+						<Package2 className='h-4 w-4 flex-none' />
+						<span className='truncate'>{container.containerNumber}</span>
+					</Link>
+
 					<div className='flex items-center gap-2'>
-						<Package2 className='h-4 w-4' />
-						<span>{container.containerNumber}</span>
+						{container.itemCount && container.itemCount > 0 && (
+							<span
+								className={`text-xs ${
+									containerId === container.id
+										? 'text-white/80'
+										: 'text-gray-400'
+								}`}>
+								{container.itemCount}
+							</span>
+						)}
+
+						<button
+							type='button'
+							onClick={() =>
+								handleDeleteContainer(
+									container.id,
+									container.containerNumber
+								)
+							}
+							className='rounded p-1 text-red-600 hover:bg-red-50 hover:text-red-900'>
+							<Trash2 className='h-4 w-4' />
+							<span className='sr-only'>Delete container</span>
+						</button>
 					</div>
-					{container.itemCount > 0 && (
-						<span
-							className={`text-xs ${
-								containerId === container.id ? 'text-white/80' : 'text-gray-400'
-							}`}>
-							{container.itemCount}
-						</span>
-					)}
-				</Link>
+				</div>
 			))}
 		</div>
 	)

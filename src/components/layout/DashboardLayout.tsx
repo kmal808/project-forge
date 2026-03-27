@@ -6,6 +6,9 @@ import {
 	Calculator,
 	Package,
 	FileSpreadsheet,
+	Shield,
+	ChevronDown,
+	ChevronRight,
 	LogOut,
 } from 'lucide-react'
 import { useAuth } from '../../contexts/AuthContext'
@@ -38,8 +41,9 @@ const navigation = [
 
 export function DashboardLayout() {
 	const [sidebarOpen, setSidebarOpen] = React.useState(true)
+	const [inventoryExpanded, setInventoryExpanded] = React.useState(true)
 	const location = useLocation()
-	const { logout } = useAuth()
+	const { logout, user } = useAuth()
 
 	// Handle window resize
 	React.useEffect(() => {
@@ -54,6 +58,13 @@ export function DashboardLayout() {
 
 		return () => window.removeEventListener('resize', handleResize)
 	}, [])
+
+	// Keep inventory expanded when user navigates into inventory pages.
+	React.useEffect(() => {
+		if (location.pathname.startsWith('/inventory')) {
+			setInventoryExpanded(true)
+		}
+	}, [location.pathname])
 
 	return (
 		<div className='min-h-screen bg-secondary'>
@@ -71,8 +82,7 @@ export function DashboardLayout() {
 					sidebarOpen ? 'translate-x-0' : '-translate-x-full'
 				}`}>
 				<div className='flex h-16 items-center justify-between px-4'>
-					<h1 className='text-xl font-bold text-primary'>Project Forge 🔨</h1>
-					<span></span>
+					<span />
 					<button
 						onClick={() => setSidebarOpen(false)}
 						className='text-secondary hover:text-primary transition-colors'>
@@ -85,19 +95,27 @@ export function DashboardLayout() {
 						<div key={item.path}>
 							{item.hasSubmenu ? (
 								<div className='space-y-2'>
-									<Link
-										to={item.path}
+									<button
+										type='button'
+										onClick={() => setInventoryExpanded((prev) => !prev)}
 										className={`flex items-center rounded-lg px-4 py-2 text-sm font-medium ${
 											location.pathname.startsWith(item.path)
 												? 'bg-secondary text-brand-orange'
 												: 'text-secondary hover:bg-secondary hover:text-primary'
 										}`}>
 										<item.icon className='mr-3 h-5 w-5' />
-										<span>{item.label}</span>
-									</Link>
-									<div className='pl-9'>
-										<ContainerList />
-									</div>
+										<span className='flex-1 text-left'>{item.label}</span>
+										{inventoryExpanded ? (
+											<ChevronDown className='h-4 w-4' />
+										) : (
+											<ChevronRight className='h-4 w-4' />
+										)}
+									</button>
+									{inventoryExpanded && (
+										<div className='pl-9'>
+											<ContainerList />
+										</div>
+									)}
 								</div>
 							) : (
 								<Link
@@ -113,6 +131,18 @@ export function DashboardLayout() {
 							)}
 						</div>
 					))}
+					{user?.role === 'admin' && (
+						<Link
+							to='/admin/users'
+							className={`flex items-center rounded-lg px-4 py-2 text-sm font-medium ${
+								location.pathname === '/admin/users'
+									? 'bg-secondary text-brand-orange'
+									: 'text-secondary hover:bg-secondary hover:text-primary'
+							}`}>
+							<Shield className='mr-3 h-5 w-5' />
+							<span>Admin Users</span>
+						</Link>
+					)}
 				</nav>
 			</div>
 
@@ -122,17 +152,30 @@ export function DashboardLayout() {
 					sidebarOpen ? 'lg:pl-64' : ''
 				}`}>
 				<div className='sticky top-0 z-40 flex h-16 shrink-0 items-center gap-x-4 border-b border-primary bg-primary px-4 shadow-xs sm:gap-x-6 sm:px-6 lg:px-8'>
-					<button
-						type='button'
-						className='-m-2.5 p-2.5 text-secondary hover:text-primary transition-colors'
-						onClick={() => setSidebarOpen(true)}>
-						<span className='sr-only'>Open sidebar</span>
-						<Menu className='h-6 w-6' aria-hidden='true' />
-					</button>
+					{!sidebarOpen && (
+						<button
+							type='button'
+							className='-m-2.5 p-2.5 text-secondary hover:text-primary transition-colors'
+							onClick={() => setSidebarOpen(true)}>
+							<span className='sr-only'>Open sidebar</span>
+							<Menu className='h-6 w-6' aria-hidden='true' />
+						</button>
+					)}
+
+					<Link
+						to='/dashboard'
+						className='text-lg font-bold text-primary hover:text-brand-orange transition-colors'>
+						Project Forge
+					</Link>
 
 					<div className='flex flex-1 gap-x-4 self-stretch lg:gap-x-6'>
 						<div className='flex flex-1'></div>
 						<div className='flex items-center gap-x-4 lg:gap-x-6'>
+							{user?.role && (
+								<span className='inline-flex items-center rounded-full border border-primary bg-secondary px-3 py-1 text-xs font-semibold uppercase tracking-wide text-secondary'>
+									{user.role}
+								</span>
+							)}
 							<ThemeSelector />
 							<button onClick={logout} className='btn-secondary'>
 								<LogOut className='h-6 w-6' />

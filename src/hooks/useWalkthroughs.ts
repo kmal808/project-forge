@@ -2,8 +2,10 @@ import React from 'react';
 import { supabase } from '../lib/supabase';
 import { toast } from 'sonner';
 import type { WalkthroughForm } from '../types';
+import { useAuth } from '../contexts/AuthContext';
 
 export function useWalkthroughs() {
+  const { user } = useAuth();
   const [walkthroughs, setWalkthroughs] = React.useState<WalkthroughForm[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<Error | null>(null);
@@ -11,13 +13,20 @@ export function useWalkthroughs() {
   const fetchWalkthroughs = React.useCallback(async () => {
     try {
       setIsLoading(true);
-      const { data, error } = await supabase
+      let query = supabase
         .from('walkthroughs')
         .select(`
           *,
           photos:files(*)
         `)
         .order('created_at', { ascending: false });
+
+      // Crew users should only see their own records.
+      if (user?.role === 'crew') {
+        query = query.eq('user_id', user.id);
+      }
+
+      const { data, error } = await query;
 
       if (error) throw error;
       setWalkthroughs(data || []);
@@ -27,7 +36,7 @@ export function useWalkthroughs() {
     } finally {
       setIsLoading(false);
     }
-  }, []);
+  }, [user?.id, user?.role]);
 
   React.useEffect(() => {
     fetchWalkthroughs();
