@@ -165,7 +165,7 @@ export function DashboardLayout() {
 					<Link
 						to='/dashboard'
 						className='text-lg font-bold text-primary hover:text-brand-orange transition-colors'>
-						Project Forge
+						Project Forge 🛠️
 					</Link>
 
 					<div className='flex flex-1 gap-x-4 self-stretch lg:gap-x-6'>

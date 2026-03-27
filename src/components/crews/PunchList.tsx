@@ -7,6 +7,9 @@ interface PunchListProps {
 	onAddItem: (item: Omit<PunchListItem, 'id'>) => void
 	onUpdateItem: (id: string, updates: Partial<PunchListItem>) => void
 	onDeleteItem: (id: string) => void
+	selectedJobName?: string
+	selectedJobNumber?: string
+	disabled?: boolean
 }
 
 export function PunchList({
@@ -14,6 +17,9 @@ export function PunchList({
 	onAddItem,
 	onUpdateItem,
 	onDeleteItem,
+	selectedJobName,
+	selectedJobNumber,
+	disabled = false,
 }: PunchListProps) {
 	const [newItem, setNewItem] = React.useState<{
 		description: string
@@ -62,6 +68,14 @@ export function PunchList({
 
 	return (
 		<div className='space-y-6'>
+			{selectedJobName && selectedJobNumber && (
+				<div className='rounded-md border border-primary/30 bg-secondary/40 px-4 py-3'>
+					<p className='text-sm font-medium text-secondary'>
+						Active Punch List: {selectedJobName} ({selectedJobNumber})
+					</p>
+				</div>
+			)}
+
 			<form onSubmit={handleSubmit} className='space-y-4'>
 				<div className='grid grid-cols-1 gap-4 sm:grid-cols-2'>
 					<div>
@@ -79,6 +93,7 @@ export function PunchList({
 							}
 							className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
 							required
+							disabled={disabled}
 						/>
 					</div>
 
@@ -97,7 +112,8 @@ export function PunchList({
 									priority: e.target.value as PunchListItem['priority'],
 								})
 							}
-							className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'>
+							className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+							disabled={disabled}>
 							<option value='low'>Low</option>
 							<option value='medium'>Medium</option>
 							<option value='high'>High</option>
@@ -117,11 +133,12 @@ export function PunchList({
 						value={newItem.notes}
 						onChange={(e) => setNewItem({ ...newItem, notes: e.target.value })}
 						className='mt-1 block w-full rounded-md border border-gray-300 bg-white text-gray-700 shadow-xs ring-1 ring-inset ring-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+						disabled={disabled}
 					/>
 				</div>
 
 				<div className='flex justify-end'>
-					<button type='submit' className='btn-primary'>
+					<button type='submit' className='btn-primary' disabled={disabled}>
 						<Plus className='h-4 w-4' />
 						Add Item
 					</button>

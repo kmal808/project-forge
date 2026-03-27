@@ -7,6 +7,9 @@ interface MaterialsListProps {
 	onAddItem: (item: Omit<MaterialItem, 'id'>) => void
 	onUpdateItem: (id: string, updates: Partial<MaterialItem>) => void
 	onDeleteItem: (id: string) => void
+	selectedJobName?: string
+	selectedJobNumber?: string
+	disabled?: boolean
 }
 
 export function MaterialsList({
@@ -14,6 +17,9 @@ export function MaterialsList({
 	onAddItem,
 	onUpdateItem,
 	onDeleteItem,
+	selectedJobName,
+	selectedJobNumber,
+	disabled = false,
 }: MaterialsListProps) {
 	const [newItem, setNewItem] = React.useState({
 		name: '',
@@ -48,6 +54,14 @@ export function MaterialsList({
 
 	return (
 		<div className='space-y-6'>
+			{selectedJobName && selectedJobNumber && (
+				<div className='rounded-md border border-primary/30 bg-secondary/40 px-4 py-3'>
+					<p className='text-sm font-medium text-secondary'>
+						Active Material List: {selectedJobName} ({selectedJobNumber})
+					</p>
+				</div>
+			)}
+
 			<form onSubmit={handleSubmit} className='space-y-4'>
 				<div className='grid grid-cols-1 gap-4 sm:grid-cols-3'>
 					<div>
@@ -63,6 +77,7 @@ export function MaterialsList({
 							onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
 							className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
 							required
+							disabled={disabled}
 						/>
 					</div>
 
@@ -85,6 +100,7 @@ export function MaterialsList({
 							}
 							className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
 							required
+							disabled={disabled}
 						/>
 					</div>
 
@@ -98,7 +114,8 @@ export function MaterialsList({
 							id='unit'
 							value={newItem.unit}
 							onChange={(e) => setNewItem({ ...newItem, unit: e.target.value })}
-							className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'>
+							className='mt-1 block w-full rounded-md border-gray-300 shadow-xs focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+							disabled={disabled}>
 							<option value='pieces'>Pieces</option>
 							<option value='feet'>Feet</option>
 							<option value='yards'>Yards</option>
@@ -120,11 +137,12 @@ export function MaterialsList({
 						value={newItem.notes}
 						onChange={(e) => setNewItem({ ...newItem, notes: e.target.value })}
 						className='mt-1 block w-full rounded-md border border-gray-300 bg-white text-gray-700 shadow-xs ring-1 ring-inset ring-gray-300 focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm'
+						disabled={disabled}
 					/>
 				</div>
 
 				<div className='flex justify-end'>
-					<button type='submit' className='btn-primary'>
+					<button type='submit' className='btn-primary' disabled={disabled}>
 						<Plus className='h-4 w-4' />
 						Add Material
 					</button>

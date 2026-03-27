@@ -2,38 +2,48 @@ import React from 'react';
 import { supabase } from '../lib/supabase';
 import { toast } from 'sonner';
 import type { MaterialItem } from '../types';
-import { useAuth } from '../contexts/AuthContext';
 
-export function useMaterials() {
-  const { user } = useAuth();
+export function useMaterials(listId?: string) {
   const [materials, setMaterials] = React.useState<MaterialItem[]>([]);
   const [isLoading, setIsLoading] = React.useState(true);
   const [error, setError] = React.useState<Error | null>(null);
 
   const fetchMaterials = React.useCallback(async () => {
+    if (!listId) {
+      setMaterials([]);
+      setIsLoading(false);
+      return;
+    }
+
     try {
       setIsLoading(true);
       let query = supabase
         .from('materials')
         .select('*')
+        .eq('list_id', listId)
         .order('created_at', { ascending: false });
-
-      // Crew users should only see their own records.
-      if (user?.role === 'crew') {
-        query = query.eq('user_id', user.id);
-      }
 
       const { data, error } = await query;
 
       if (error) throw error;
-      setMaterials(data || []);
+      setMaterials((data || []).map((row: any) => ({
+        id: row.id,
+        listId: row.list_id,
+        name: row.name,
+        quantity: row.quantity,
+        unit: row.unit,
+        status: row.status,
+        orderDate: row.order_date ?? undefined,
+        receivedDate: row.received_date ?? undefined,
+        notes: row.notes ?? undefined,
+      })));
     } catch (err) {
       setError(err instanceof Error ? err : new Error('Failed to fetch materials'));
       toast.error('Failed to fetch materials');
     } finally {
       setIsLoading(false);
     }
-  }, [user?.id, user?.role]);
+  }, [listId]);
 
   React.useEffect(() => {
     fetchMaterials();
@@ -47,7 +57,8 @@ export function useMaterials() {
         {
           event: '*',
           schema: 'public',
-          table: 'materials'
+          table: 'materials',
+          ...(listId ? { filter: `list_id=eq.${listId}` } : {})
         },
         () => {
           fetchMaterials();
@@ -58,9 +69,14 @@ export function useMaterials() {
     return () => {
       supabase.removeChannel(channel);
     };
-  }, [fetchMaterials]);
+  }, [fetchMaterials, listId]);
 
-  const addMaterial = async (material: Omit<MaterialItem, 'id' | 'user_id'>) => {
+  const addMaterial = async (material: Omit<MaterialItem, 'id'>) => {
+    if (!listId) {
+      toast.error('Select a material list first');
+      return;
+    }
+
     try {
       const { data: userData, error: userError } = await supabase.auth.getUser();
       if (userError) throw userError;
@@ -69,7 +85,14 @@ export function useMaterials() {
         .from('materials')
         .insert([
           {
-            ...material,
+            list_id: listId,
+            name: material.name,
+            quantity: material.quantity,
+            unit: material.unit,
+            status: material.status,
+            order_date: material.orderDate,
+            received_date: material.receivedDate,
+            notes: material.notes,
             user_id: userData.user.id,
           }
         ])
@@ -77,10 +100,22 @@ export function useMaterials() {
         .single();
 
       if (error) throw error;
-      
-      setMaterials((prev) => [data, ...prev]);
+
+      const mapped: MaterialItem = {
+        id: data.id,
+        listId: data.list_id,
+        name: data.name,
+        quantity: data.quantity,
+        unit: data.unit,
+        status: data.status,
+        orderDate: data.order_date ?? undefined,
+        receivedDate: data.received_date ?? undefined,
+        notes: data.notes ?? undefined,
+      };
+
+      setMaterials((prev) => [mapped, ...prev]);
       toast.success('Material added successfully');
-      return data;
+      return mapped;
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Failed to add material';
       toast.error(message);
@@ -89,18 +124,45 @@ export function useMaterials() {
   };
 
   const updateMaterial = async (id: string, updates: Partial<MaterialItem>) => {
+    if (!listId) {
+      toast.error('Select a material list first');
+      return;
+    }
+
     try {
       const { data, error } = await supabase
         .from('materials')
-        .update(updates)
+        .update({
+          name: updates.name,
+          quantity: updates.quantity,
+          unit: updates.unit,
+          status: updates.status,
+          order_date: updates.orderDate,
+          received_date: updates.receivedDate,
+          notes: updates.notes,
+        })
         .eq('id', id)
+        .eq('list_id', listId)
         .select()
         .single();
 
       if (error) throw error;
 
       setMaterials((prev) =>
-        prev.map((material) => (material.id === id ? { ...material, ...data } : material))
+        prev.map((material) =>
+          material.id === id
+            ? {
+                ...material,
+                name: data.name,
+                quantity: data.quantity,
+                unit: data.unit,
+                status: data.status,
+                orderDate: data.order_date ?? undefined,
+                receivedDate: data.received_date ?? undefined,
+                notes: data.notes ?? undefined,
+              }
+            : material
+        )
       );
       
       toast.success('Material updated successfully');
@@ -113,11 +175,17 @@ export function useMaterials() {
   };
 
   const deleteMaterial = async (id: string) => {
+    if (!listId) {
+      toast.error('Select a material list first');
+      return;
+    }
+
     try {
       const { error } = await supabase
         .from('materials')
         .delete()
-        .eq('id', id);
+        .eq('id', id)
+        .eq('list_id', listId);
 
       if (error) throw error;
 

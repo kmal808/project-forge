@@ -54,6 +54,7 @@ export interface FileUpload {
 
 export interface PunchListItem {
   id: string;
+  listId?: string;
   description: string;
   status: 'pending' | 'in-progress' | 'completed';
   priority: 'low' | 'medium' | 'high';
@@ -65,6 +66,7 @@ export interface PunchListItem {
 
 export interface MaterialItem {
   id: string;
+  listId?: string;
   name: string;
   quantity: number;
   unit: string;
@@ -72,6 +74,28 @@ export interface MaterialItem {
   orderDate?: string;
   receivedDate?: string;
   notes?: string;
+}
+
+export interface PunchJobList {
+  id: string;
+  crewId: string;
+  jobName: string;
+  jobNumber: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
+  itemCount?: number;
+}
+
+export interface MaterialJobList {
+  id: string;
+  crewId: string;
+  jobName: string;
+  jobNumber: string;
+  userId: string;
+  createdAt: string;
+  updatedAt: string;
+  itemCount?: number;
 }
 
 export interface WalkthroughForm {
