@@ -73,11 +73,6 @@ async function fetchRoleFromRolesTable(userId: string): Promise<UserRole | null>
     const override = getRuntimeRoleOverride();
     if (override) return override;
 
-    // Disabled by default because some Supabase RLS policies on `roles`
-    // can cause recursion errors from the client.
-    const enabled = Boolean((import.meta as any)?.env?.VITE_USE_ROLES_TABLE);
-    if (!enabled) return null;
-
     // Note: supabase types in this repo are not exhaustive; keep this query tolerant.
     // Also: the `roles` table schema may vary (role/name, user_id/userId/etc).
     const { data, error } = await (supabase as any)
