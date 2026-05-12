@@ -2,7 +2,15 @@ import React from 'react'
 import { PayrollEntry, CrewPayroll } from '../../types'
 import { usePayroll } from '../../hooks/usePayroll'
 import { EmployeePayrollTable } from './CrewPayrollTable'
-import { PlusCircle, FileDown, Edit2, Check, FileText, Trash2 } from 'lucide-react'
+import {
+	PlusCircle,
+	FileDown,
+	Edit2,
+	Check,
+	FileText,
+	Trash2,
+	Save,
+} from 'lucide-react'
 import { ErrorBoundary } from '../ui/ErrorBoundary'
 import { LoadingSpinner } from '../ui/LoadingSpinner'
 import { toast } from 'sonner'
@@ -16,7 +24,7 @@ export function PayrollPage() {
 		updateCrew,
 		deleteCrew,
 		deleteEmployee,
-		updateEmployeeEntries,
+		submitAllEmployeeEntries,
 		isLoading,
 	} = usePayroll()
 	const [editingCrewId, setEditingCrewId] = React.useState<string | null>(null)
@@ -24,6 +32,22 @@ export function PayrollPage() {
 	const [draftEntries, setDraftEntries] = React.useState<
 		Record<string, PayrollEntry[]>
 	>({})
+	const [isSubmittingAll, setIsSubmittingAll] = React.useState(false)
+
+	const effectiveCrews = React.useMemo(
+		() =>
+			crews.map((crew) => ({
+				...crew,
+				employees: crew.employees.map((employee) => {
+					const key = `${crew.crewId}-${employee.employeeId}`
+					return {
+						...employee,
+						entries: draftEntries[key] || employee.entries,
+					}
+				}),
+			})),
+		[crews, draftEntries]
+	)
 
 	const handleAddCrew = async () => {
 		const newCrewName = `Crew ${crews.length + 1}`
@@ -89,7 +113,6 @@ export function PayrollPage() {
 		const crew = crews.find((c) => c.crewId === crewId)
 		if (!crew) return
 
-		// Check if crew has employees
 		if (crew.employees.length > 0) {
 			toast.error(
 				`Cannot delete crew "${crew.crewName}". Please remove all employees first.`,
@@ -120,9 +143,12 @@ export function PayrollPage() {
 		newEntry: PayrollEntry
 	) => {
 		const key = `${crewId}-${employeeId}`
+		const crew = crews.find((c) => c.crewId === crewId)
+		const employee = crew?.employees.find((emp) => emp.employeeId === employeeId)
+		const baseEntries = draftEntries[key] || employee?.entries || []
+
 		setDraftEntries((prev) => {
-			const currentEntries = prev[key] || []
-			const updatedEntries = [...currentEntries]
+			const updatedEntries = [...baseEntries]
 			updatedEntries[entryIndex] = newEntry
 			return { ...prev, [key]: updatedEntries }
 		})
@@ -134,9 +160,13 @@ export function PayrollPage() {
 		entry: PayrollEntry
 	) => {
 		const key = `${crewId}-${employeeId}`
+		const crew = crews.find((c) => c.crewId === crewId)
+		const employee = crew?.employees.find((emp) => emp.employeeId === employeeId)
+		const baseEntries = draftEntries[key] || employee?.entries || []
+
 		setDraftEntries((prev) => ({
 			...prev,
-			[key]: [...(prev[key] || []), entry],
+			[key]: [...baseEntries, entry],
 		}))
 	}
 
@@ -146,36 +176,40 @@ export function PayrollPage() {
 		index: number
 	) => {
 		const key = `${crewId}-${employeeId}`
+		const crew = crews.find((c) => c.crewId === crewId)
+		const employee = crew?.employees.find((emp) => emp.employeeId === employeeId)
+		const baseEntries = draftEntries[key] || employee?.entries || []
+
 		setDraftEntries((prev) => {
-			const entries = [...(prev[key] || [])]
+			const entries = [...baseEntries]
 			entries.splice(index, 1)
 			return { ...prev, [key]: entries }
 		})
 	}
 
-	const handleSubmitEntries = async (
-		crewId: string,
-		employeeId: string,
-		entries: PayrollEntry[]
-	) => {
+	const handleSubmitAllPayroll = async () => {
+		setIsSubmittingAll(true)
 		try {
-			await updateEmployeeEntries(crewId, employeeId, entries)
-			// Clear the draft entries for this employee
-			const key = `${crewId}-${employeeId}`
-			setDraftEntries((prev) => {
-				const newDrafts = { ...prev }
-
-				delete newDrafts[key]
-				return newDrafts
-			})
+			await submitAllEmployeeEntries(
+				effectiveCrews.flatMap((crew) =>
+					crew.employees.map((employee) => ({
+						crewId: crew.crewId,
+						employeeId: employee.employeeId,
+						entries: employee.entries,
+					}))
+				)
+			)
+			setDraftEntries({})
 		} catch (error) {
-			console.error('Error submitting entries:', error)
-			toast.error('Failed to submit entries')
+			console.error('Error submitting all payroll:', error)
+			toast.error('Failed to submit payroll')
+		} finally {
+			setIsSubmittingAll(false)
 		}
 	}
 
 	const exportPayroll = () => {
-		const data = JSON.stringify(crews, null, 2)
+		const data = JSON.stringify(effectiveCrews, null, 2)
 		const blob = new Blob([data], { type: 'application/json' })
 		const url = URL.createObjectURL(blob)
 		const a = document.createElement('a')
@@ -191,7 +225,6 @@ export function PayrollPage() {
 		try {
 			toast.loading('Generating PDF...', { id: 'pdf-export' })
 
-			// Create a hidden container for print rendering
 			const printContainer = document.createElement('div')
 			printContainer.style.cssText = `
 				position: absolute;
@@ -203,14 +236,13 @@ export function PayrollPage() {
 				font-family: system-ui, -apple-system, sans-serif;
 			`
 
-			// Build print HTML with crew and employee blocks.
 			const date = new Date().toLocaleDateString()
 			printContainer.innerHTML = `
 				<div data-pdf-block="report-header" style="margin-bottom: 24px; text-align: center;">
 					<h1 style="font-size: 24px; font-weight: bold; margin: 0; color: #1f2937;">Payroll Report</h1>
 					<p style="font-size: 14px; color: #6b7280; margin: 5px 0 0 0;">Generated on ${date}</p>
 				</div>
-				${crews
+				${effectiveCrews
 					.map((crew) => {
 						const crewTotal = crew.employees.reduce(
 							(total, emp) =>
@@ -243,12 +275,12 @@ export function PayrollPage() {
 
 											if (employee.entries.length === 0) {
 												return `
-								<div data-pdf-block="employee" style="margin-bottom: 24px; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px;">
-									<h3 style="font-size: 16px; font-weight: 500; margin: 0; color: #374151;">
-										${employee.name} - No entries
-									</h3>
-								</div>
-							`
+													<div data-pdf-block="employee" style="margin-bottom: 24px; border: 1px solid #e5e7eb; border-radius: 8px; padding: 12px;">
+														<h3 style="font-size: 16px; font-weight: 500; margin: 0; color: #374151;">
+															${employee.name} - No entries
+														</h3>
+													</div>
+												`
 											}
 
 											return `
@@ -297,21 +329,20 @@ export function PayrollPage() {
 										})
 										.join('')
 
-					return `
-						<div data-pdf-block="crew-header" style="margin-bottom: 12px;">
-							<h2 style="font-size: 20px; font-weight: 600; margin-bottom: 20px; color: #1f2937; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px;">
-								${crew.crewName} - Total: $${crewTotal.toFixed(2)}
-							</h2>
-						</div>
-						${employeeBlocks}
-					`
+						return `
+							<div data-pdf-block="crew-header" style="margin-bottom: 12px;">
+								<h2 style="font-size: 20px; font-weight: 600; margin-bottom: 20px; color: #1f2937; border-bottom: 2px solid #e5e7eb; padding-bottom: 10px;">
+									${crew.crewName} - Total: $${crewTotal.toFixed(2)}
+								</h2>
+							</div>
+							${employeeBlocks}
+						`
 					})
 					.join('')}
 			`
 
 			document.body.appendChild(printContainer)
 
-			// Create PDF and add each block with page-aware layout
 			const pdf = new jsPDF({
 				orientation: 'portrait',
 				unit: 'mm',
@@ -333,7 +364,6 @@ export function PayrollPage() {
 			for (const block of blocks) {
 				const blockType = block.getAttribute('data-pdf-block')
 
-				// Start each crew on a new page for cleaner accountant-ready exports.
 				if (blockType === 'crew-header') {
 					if (hasRenderedCrew) {
 						pdf.addPage()
@@ -351,7 +381,6 @@ export function PayrollPage() {
 
 				const blockHeightMm = (canvas.height * contentWidth) / canvas.width
 
-				// If block fits on a fresh page but not current remainder, page-break before block.
 				if (
 					blockHeightMm <= maxContentHeight &&
 					currentY + blockHeightMm > pageHeight - margin
@@ -373,7 +402,6 @@ export function PayrollPage() {
 					continue
 				}
 
-				// Oversized block fallback: slice only this block across pages.
 				const maxSliceHeightPx = Math.floor(
 					(maxContentHeight * canvas.width) / contentWidth
 				)
@@ -451,6 +479,13 @@ export function PayrollPage() {
 						<FileDown size={18} />
 						Export JSON
 					</button>
+					<button
+						onClick={handleSubmitAllPayroll}
+						className='btn-primary'
+						disabled={isSubmittingAll}>
+						<Save size={18} />
+						{isSubmittingAll ? 'Submitting...' : 'Submit All Payroll'}
+					</button>
 				</div>
 			</div>
 
@@ -458,7 +493,7 @@ export function PayrollPage() {
 				{isLoading ? (
 					<LoadingSpinner />
 				) : (
-					crews.map((crew) => (
+					effectiveCrews.map((crew) => (
 						<div
 							key={crew.crewId}
 							className='card'>
@@ -501,49 +536,30 @@ export function PayrollPage() {
 								</button>
 							</div>
 
-							{crew.employees.map((employee) => {
-								const key = `${crew.crewId}-${employee.employeeId}`
-								const employeeEntries = draftEntries[key] || employee.entries
-
-								return (
-									<EmployeePayrollTable
-										key={employee.employeeId}
-										employeeId={employee.employeeId}
-										crewId={crew.crewId}
-										employeeName={employee.name}
-										onNameChange={(name) =>
-											handleUpdateEmployeeName(
-												crew.crewId,
-												employee.employeeId,
-												name
-											)
-										}
-										onDelete={() => handleDeleteEmployee(employee.employeeId)}
-										entries={employeeEntries}
-										onEntryChange={(index, entry) =>
-											handleEntryChange(
-												crew.crewId,
-												employee.employeeId,
-												index,
-												entry
-											)
-										}
-										onAddEntry={(entry) =>
-											handleAddEntry(crew.crewId, employee.employeeId, entry)
-										}
-										onRemoveEntry={(index) =>
-											handleRemoveEntry(crew.crewId, employee.employeeId, index)
-										}
-										onSubmitEntries={(entries) =>
-											handleSubmitEntries(
-												crew.crewId,
-												employee.employeeId,
-												entries
-											)
-										}
-									/>
-								)
-							})}
+							{crew.employees.map((employee) => (
+								<EmployeePayrollTable
+									key={employee.employeeId}
+									employeeName={employee.name}
+									onNameChange={(name) =>
+										handleUpdateEmployeeName(
+											crew.crewId,
+											employee.employeeId,
+											name
+										)
+									}
+									onDelete={() => handleDeleteEmployee(employee.employeeId)}
+									entries={employee.entries}
+									onEntryChange={(index, entry) =>
+										handleEntryChange(crew.crewId, employee.employeeId, index, entry)
+									}
+									onAddEntry={(entry) =>
+										handleAddEntry(crew.crewId, employee.employeeId, entry)
+									}
+									onRemoveEntry={(index) =>
+										handleRemoveEntry(crew.crewId, employee.employeeId, index)
+									}
+								/>
+							))}
 						</div>
 					))
 				)}

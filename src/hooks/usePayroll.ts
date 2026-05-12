@@ -3,17 +3,42 @@ import { supabase } from '../lib/supabase'
 import { toast } from 'sonner'
 import type { CrewPayroll, PayrollEntry } from '../types'
 
+type PayrollSubmission = {
+	crewId: string
+	employeeId: string
+	entries: PayrollEntry[]
+}
+
+const mapEntryToPayrollRow = (
+	employeeId: string,
+	entry: PayrollEntry,
+	userId: string
+) => ({
+	employee_id: employeeId,
+	job_name: entry.jobName,
+	job_number: entry.jobNumber,
+	sunday_amount: Number(entry.amounts[0]) || 0,
+	monday_amount: Number(entry.amounts[1]) || 0,
+	tuesday_amount: Number(entry.amounts[2]) || 0,
+	wednesday_amount: Number(entry.amounts[3]) || 0,
+	thursday_amount: Number(entry.amounts[4]) || 0,
+	friday_amount: Number(entry.amounts[5]) || 0,
+	saturday_amount: Number(entry.amounts[6]) || 0,
+	date: entry.date,
+	user_id: userId,
+})
+
 export function usePayroll() {
 	const [crews, setCrews] = React.useState<CrewPayroll[]>([])
 	const [isLoading, setIsLoading] = React.useState(true)
 	const [error, setError] = React.useState<Error | null>(null)
+	const suppressPayrollRefreshUntilRef = React.useRef<number>(0)
 
 	const fetchPayrollData = React.useCallback(async () => {
 		try {
 			setIsLoading(true)
 			console.log('Fetching payroll data...')
 
-			// First, fetch all crews
 			const { data: crewsData, error: crewsError } = await supabase
 				.from('crews')
 				.select('id, name')
@@ -26,7 +51,6 @@ export function usePayroll() {
 
 			console.log('Raw crews data:', crewsData)
 
-			// Then, for each crew, fetch its employees
 			const crewsWithEmployees = await Promise.all(
 				(crewsData || []).map(async (crew) => {
 					const { data: employeesData, error: employeesError } = await supabase
@@ -39,7 +63,6 @@ export function usePayroll() {
 						throw employeesError
 					}
 
-					// For each employee, fetch their payroll entries
 					const employeesWithEntries = await Promise.all(
 						(employeesData || []).map(async (employee) => {
 							const { data: entriesData, error: entriesError } = await supabase
@@ -99,6 +122,14 @@ export function usePayroll() {
 	}, [fetchPayrollData])
 
 	React.useEffect(() => {
+		const refreshPayrollData = () => {
+			if (Date.now() < suppressPayrollRefreshUntilRef.current) {
+				return
+			}
+
+			fetchPayrollData()
+		}
+
 		const channels = [
 			supabase
 				.channel('crews_changes')
@@ -121,7 +152,7 @@ export function usePayroll() {
 				.on(
 					'postgres_changes',
 					{ event: '*', schema: 'public', table: 'payroll_entries' },
-					() => fetchPayrollData()
+					refreshPayrollData
 				)
 				.subscribe(),
 		]
@@ -186,14 +217,12 @@ export function usePayroll() {
 					await supabase.auth.getUser()
 				if (userError) throw userError
 
-				// Update existing employees
 				for (const employee of updates.employees) {
 					const existingEmployee = crew.employees.find(
 						(e) => e.employeeId === employee.employeeId
 					)
 
 					if (existingEmployee) {
-						// Update employee name if it changed
 						if (existingEmployee.name !== employee.name) {
 							const { error } = await supabase
 								.from('employees')
@@ -203,7 +232,6 @@ export function usePayroll() {
 							if (error) throw error
 						}
 					} else {
-						// Add new employee
 						const { error } = await supabase.from('employees').insert([
 							{
 								name: employee.name,
@@ -217,7 +245,7 @@ export function usePayroll() {
 				}
 			}
 
-			await fetchPayrollData() // Refresh data
+			await fetchPayrollData()
 			toast.success('Crew updated successfully')
 		} catch (err) {
 			const message =
@@ -254,75 +282,79 @@ export function usePayroll() {
 		}
 	}
 
-	const updateEmployeeEntries = async (
-		crewId: string,
-		employeeId: string,
-		entries: PayrollEntry[]
-	) => {
+	const submitAllEmployeeEntries = async (submissions: PayrollSubmission[]) => {
 		try {
 			const { data: userData, error: userError } = await supabase.auth.getUser()
 			if (userError) throw userError
 
-			// Delete existing entries for this employee
-			const { error: deleteError } = await supabase
-				.from('payroll_entries')
-				.delete()
-				.eq('employee_id', employeeId)
+			suppressPayrollRefreshUntilRef.current = Date.now() + 5000
 
-			if (deleteError) throw deleteError
+			for (const submission of submissions) {
+				const { error: deleteError } = await supabase
+					.from('payroll_entries')
+					.delete()
+					.eq('employee_id', submission.employeeId)
 
-			// Only insert new entries if there are any
-			if (entries.length > 0) {
-				// Now insert the entries with the correct structure
-				for (const entry of entries) {
-					// Calculate total amount for the week
-					const totalAmount = entry.amounts.reduce((sum, amount) => sum + (Number(amount) || 0), 0)
-					
+				if (deleteError) throw deleteError
+
+				if (submission.entries.length > 0) {
+					const rows = submission.entries.map((entry) =>
+						mapEntryToPayrollRow(submission.employeeId, entry, userData.user.id)
+					)
+
 					const { error: insertError } = await supabase
 						.from('payroll_entries')
-						.insert({
-							employee_id: employeeId,
-							job_name: entry.jobName,
-							job_number: entry.jobNumber,
-							amount: totalAmount,
-							date: entry.date,
-							user_id: userData.user.id,
-						})
+						.insert(rows)
 
 					if (insertError) {
-						console.error('Error inserting entry:', insertError)
+						console.error('Error inserting payroll entries:', insertError)
 						throw insertError
 					}
 				}
 			}
 
-			// Update the local state immediately without refreshing
-			setCrews(prev => prev.map(crew => {
-				if (crew.crewId === crewId) {
-					return {
-						...crew,
-						employees: crew.employees.map(emp => {
-							if (emp.employeeId === employeeId) {
-								return {
-									...emp,
-									entries: entries // Set to the new entries (empty array if deleted)
-								}
-							}
-							return emp
-						})
-					}
-				}
-				return crew
-			}))
+			setCrews((prev) =>
+				prev.map((crew) => ({
+					...crew,
+					employees: crew.employees.map((employee) => ({
+						...employee,
+						entries: [],
+					})),
+				}))
+			)
 
-			toast.success('Payroll entries updated successfully')
+			toast.success('Payroll submitted successfully')
 		} catch (err) {
-			console.error('Error updating entries:', err)
+			console.error('Error submitting payroll:', err)
+			suppressPayrollRefreshUntilRef.current = 0
 			const message =
-				err instanceof Error ? err.message : 'Failed to update payroll entries'
+				err instanceof Error ? err.message : 'Failed to submit payroll'
 			toast.error(message)
 			throw err
 		}
+	}
+
+	const updateEmployeeEntries = async (
+		crewId: string,
+		employeeId: string,
+		entries: PayrollEntry[]
+	) => {
+		await submitAllEmployeeEntries([{ crewId, employeeId, entries }])
+
+		setCrews((prev) =>
+			prev.map((crew) => {
+				if (crew.crewId !== crewId) return crew
+
+				return {
+					...crew,
+					employees: crew.employees.map((employee) =>
+						employee.employeeId === employeeId
+							? { ...employee, entries }
+							: employee
+					),
+				}
+			})
+		)
 	}
 
 	const deleteCrew = async (crewId: string) => {
@@ -350,6 +382,7 @@ export function usePayroll() {
 		deleteCrew,
 		deleteEmployee,
 		updateEmployeeEntries,
+		submitAllEmployeeEntries,
 		refresh: fetchPayrollData,
 	}
 }

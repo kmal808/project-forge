@@ -1,6 +1,6 @@
 import React from 'react'
 import { PayrollEntry } from '../../types'
-import { Edit2, Check, Plus, Save, Trash2 } from 'lucide-react'
+import { Edit2, Check, Plus, Trash2 } from 'lucide-react'
 
 interface EmployeePayrollTableProps {
 	employeeName?: string
@@ -9,7 +9,7 @@ interface EmployeePayrollTableProps {
 	entries: PayrollEntry[]
 	onEntryChange: (index: number, entry: PayrollEntry) => void
 	onAddEntry: (entry: PayrollEntry) => void
-	onSubmitEntries: (entries: PayrollEntry[]) => void
+	onRemoveEntry: (index: number) => void
 }
 
 export function EmployeePayrollTable({
@@ -19,7 +19,7 @@ export function EmployeePayrollTable({
 	entries,
 	onEntryChange,
 	onAddEntry,
-	onSubmitEntries,
+	onRemoveEntry,
 }: EmployeePayrollTableProps) {
 	const days = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat']
 	const weekTotal = entries.reduce(
@@ -37,7 +37,6 @@ export function EmployeePayrollTable({
 		date: new Date().toISOString().split('T')[0],
 	})
 
-	// Update tempName when employeeName prop changes
 	React.useEffect(() => {
 		setTempName(employeeName)
 	}, [employeeName])
@@ -58,12 +57,6 @@ export function EmployeePayrollTable({
 			amounts: Array(7).fill(0),
 			date: new Date().toISOString().split('T')[0],
 		})
-	}
-
-	const handleRemoveEntry = (index: number) => {
-		const updatedEntries = [...entries]
-		updatedEntries.splice(index, 1)
-		onSubmitEntries(updatedEntries)
 	}
 
 	return (
@@ -109,14 +102,6 @@ export function EmployeePayrollTable({
 						</div>
 					)}
 				</div>
-				{entries.length > 0 && (
-					<button
-						onClick={() => onSubmitEntries(entries)}
-						className='btn-primary'>
-						<Save className='h-4 w-4' />
-						Submit Entries
-					</button>
-				)}
 			</div>
 			<div className='overflow-x-auto'>
 				<table className='min-w-full divide-y divide-gray-200'>
@@ -187,7 +172,7 @@ export function EmployeePayrollTable({
 								))}
 								<td className='whitespace-nowrap px-3 py-2 text-center'>
 									<button
-										onClick={() => handleRemoveEntry(index)}
+										onClick={() => onRemoveEntry(index)}
 										className='text-red-600 hover:text-red-800'>
 										<Trash2 className='h-4 w-4' />
 									</button>
